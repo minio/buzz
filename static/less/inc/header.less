@@ -1,0 +1,58 @@
+#header {
+    background-color: @header-bg;
+    min-height: @header-height;
+    box-shadow: 2px 2px 4px 0 rgba(0, 0, 0, 0.2);
+
+    a {
+        color: @header-color;
+       .transition(opacity);
+        .transition-duration(300ms)
+    }
+
+    a:hover {
+        .opacity(0.8);
+        color: @header-color;
+    }
+
+    .clearfix();
+}
+
+.header__logo {   
+    float: left;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 1.15em;
+    padding: 25px 30px;
+
+    & > img {
+        width: 20px;
+        vertical-align: top;
+        margin-right: 5px;
+    }
+}
+
+.header__nav {
+    float: right;
+    padding-right: 20px;
+
+    & > a {
+        text-transform: uppercase;
+        padding: 27px 15px;
+        display: inline-block;
+
+        & > i {
+            font-size: 19px;
+            margin: -2px 8px 0 0;
+            float: left;
+            position: relative;
+            top: 1px;
+
+        }
+    }
+}
+
+.header__nav__reports {
+    & > img {
+        top: 3px;
+    }
+}

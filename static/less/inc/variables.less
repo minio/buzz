@@ -1,0 +1,71 @@
+// Media Query breakpoints
+@screen-xs:                  480px;
+@screen-xs-min:              @screen-xs;
+@screen-phone:               @screen-xs-min;
+@screen-sm:                  768px;
+@screen-sm-min:              @screen-sm;
+@screen-tablet:              @screen-sm-min;
+@screen-md:                  992px;
+@screen-md-min:              @screen-md;
+@screen-desktop:             @screen-md-min;
+@screen-lg:                  1200px;
+@screen-lg-min:              @screen-lg;
+@screen-lg-desktop:          @screen-lg-min;
+@screen-xs-max:              (@screen-sm-min - 1);
+@screen-sm-max:              (@screen-md-min - 1);
+@screen-md-max:              (@screen-lg-min - 1);
+
+// Grid System
+@grid-columns: 12;
+@grid-gutter-width: 30px;
+@grid-float-breakpoint: @screen-sm-min;
+@grid-float-breakpoint-max: (@grid-float-breakpoint - 1);
+
+// Typography
+@font-family: 'Lato', sans-serif;
+@font-family-icon: 'fontAwesome';
+@heading-font-family: @font-family;
+@font-size-base: 14px;
+@font-weight: 400;
+
+// Scaffolding
+@body-bg-color: #f3f3f3;
+@text-color: #828282;
+@text-color-muted: #a3a3a3;
+@link-color: #03a9f4;
+@link-hover-color: darken(@link-color, 10%);
+@heading-color: #2e353b;
+
+// Header
+@header-bg: #2e353b;
+@header-color: #e0e0e1;
+@header-height: 71px;
+
+// Colors
+@white: #fff;
+@black: #000;
+@light-grey: #f7f7f7;
+@teal: #32c787;
+@cyan: #00bcd4;
+@orange: #ffa92b;
+@red: #ff6b68;
+@blue: #03A9F4;
+@purple: #d066e2;
+
+// Form
+@input-border: #f0efef;
+@input-border-focus: #99dfff;
+@input-font-size: @font-size-base;
+
+// Pagination
+@pagination-button-bg: #f1f1f1;
+@pagination-button-hover-bg: darken(#f1f1f1, 3%);
+@pagination-button-active-bg: #03a9f4;
+
+// Card
+@card-bg: @white;
+@card-shadow: 0 1px 1px rgba(0,0,0,0.08);
+
+// Table
+@table-cell-color: @heading-color;
+@table-hover-bg: #fff8e1;

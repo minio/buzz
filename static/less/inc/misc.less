@@ -1,0 +1,85 @@
+.preview {
+    position: fixed;
+    z-index: 1000;
+    left: 10%;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    max-width: 80%;
+    overflow-y: auto;
+    background-color: @white;
+
+    .preview-table-close {
+        cursor: pointer;
+        position: absolute;
+        top: 25px;
+        right: 30px;
+        width: 32px;
+        height: 32px;
+        .img-retina('../img/times.png', '../img/times@2x.png', 32px, 32px);
+        background-repeat: no-repeat;
+        background-position: center;
+        .opacity(0.7);
+        .transition(opacity);
+        .transition-duration(300ms);
+
+        &:hover {
+            .opacity(1);
+        }
+    }
+}
+
+.preview--table {
+    display: none;
+    min-width: 1200px;
+
+    [data-table-action="fullscreen"] {
+        display: none;
+    }
+}
+
+.preview--table__attrs {
+    text-align: center;
+    padding: 45px 50px 0 35px;
+
+    & > div {
+        display: inline-block;
+        text-align: left;
+        border-radius: 3px;
+        margin: 0 3px;
+        padding: 15px 20px;
+        background-color: #26c6da;
+
+        & > small {
+            display: block;
+            margin-bottom: 3px;
+            color: fade(@white, 75%);
+            font-size: 0.85em;
+        }
+
+        & > strong {
+            display: block;
+            color: @white;
+        }
+    }
+}
+
+.preview--loader {
+    .loader(100%);
+}
+
+.preview-backdrop {
+    position: fixed;
+    background-color: rgba(0,0,0,0.1);
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    cursor: pointer;
+    display: none;
+}
+
+.overflow-hidden {
+    overflow: hidden;
+}

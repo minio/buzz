@@ -1,0 +1,24 @@
+.form-control {
+    .appearance(none);
+    background-color: @white;
+    padding: 5px 12px 6px;
+    line-height: inherit;
+    border-radius: 0;
+    border: 1px solid @input-border;
+    width: 100%;
+    .transition(border-color);
+    .transition-duration(300ms);
+
+    &:not(.form-control--lg) {
+        height: 38px;
+    }
+
+    &:focus {
+        border-color: @input-border-focus;
+    }
+}
+
+.form-control--lg {
+    height: 45px;
+    font-size: 1.1em;
+}

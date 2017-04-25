@@ -1,0 +1,84 @@
+.tab__nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: 0 2px 0 0 @body-bg-color;
+    position: relative;
+    z-index: 1;
+
+    & > li {
+        & > a {
+            text-transform: uppercase;
+            font-weight: 500;
+            padding: 20px 15px 17px;
+            display: block;
+            text-align: center;
+            position: relative;
+            color: lighten(@text-color, 20%);
+
+            &, &:before, &:after {
+                .transition(all);
+                .transition-duration(300ms);
+            }
+
+            &:before,
+            &:after {
+                position: absolute;
+                bottom: -2px;
+                width: 0;
+                background-color: lighten(@blue, 10%);
+                content: '';
+                height: 2px;
+            }
+
+            &:before {
+                left: 50%;
+            }
+
+            &:after {
+                right: 50%;
+            }
+        }
+
+        &.active {
+            & > a {
+                color: @blue;
+                
+                &:before,
+                &:after {
+                    width: 50%;
+                }
+            }
+        }
+    }
+
+    &:not(.tab__nav--justified) {
+        & > li {
+            display: inline-block;
+        }
+    }
+}
+
+.tab__nav--justified {
+    & > li {
+        display: table-cell;
+        width: 1%;
+    }
+}
+
+.tab__content {
+    & > .tab__pane {
+        position: relative;
+        .animation-name(fadeIn);
+        .animation-fill-mode(both);
+        .animation-duration(1000ms);
+
+        &:not(.active) {
+            display: none;
+        }
+    }
+}
+
+.tab__pane--loader {
+    .loader(250px);
+}

@@ -1,0 +1,138 @@
+.table {
+    width: 100%;
+    max-width: 100%;
+    background-color: @white;
+    border-collapse: collapse;
+
+    &:not(.table--card) {
+        > thead,
+        > tbody,
+        > tfoot {
+            > tr {
+                > th,
+                > td {
+                    padding: 15px;
+                }
+            }
+        }
+    }
+
+    > thead > tr > th {
+        vertical-align: bottom;
+        text-align: left;
+        color: @heading-color;
+        text-transform: uppercase;
+        font-size: 0.9em;
+    }
+
+    > tbody > {
+        > tr {
+            &:nth-of-type(odd) {
+                background-color: @light-grey;
+            }
+            
+            > td {
+                color: @table-cell-color;
+            }
+        }
+    }
+}
+
+.table--card {
+    > thead,
+    > tbody,
+    > tfoot {
+        > tr {
+            > th,
+            > td {
+                &:not(:first-child):not(:last-child) {
+                    padding: 18px 7px;
+                }
+
+                &:first-child {
+                    padding: 18px 7px 18px 52px;
+                }
+
+                &:last-child {
+                    padding: 18px 52px 18px 7px;
+                }
+            }
+        }
+    }
+}
+
+.table--data {
+    > thead,
+    > tbody,
+    > tfoot {
+        & > tr {
+            & > td {
+                max-width: 0;
+                .text-overflow();
+            }
+        }
+
+        & > tr {
+            & > th {
+                cursor: pointer;
+                .transition(color);
+                .transition-duration(300ms);
+                
+                &:hover {
+                    color: @link-hover-color;
+                }
+            }
+        }
+    }
+
+    &.toggled {
+
+    }
+}
+
+.table--bordered {
+    border-top: 1px solid darken(@light-grey, 1%);
+    border-bottom: 1px solid darken(@light-grey, 1%);
+
+    & > thead,
+    & > tbody {
+        & > tr {
+            & > td,
+            & > th {
+                &:not(:last-child) {
+                    border-right: 1px solid darken(@light-grey, 1%);
+                }
+            }
+        }
+    }
+}
+
+.table--clickable {
+    & > tbody {
+        & > tr {
+            &:hover {
+                cursor: pointer;
+                background-color: @table-hover-bg;
+            }
+        }
+    }
+}
+
+.rc-handle-container {
+    position: relative;
+}
+.rc-handle {
+    position: absolute;
+    width: 7px;
+    cursor: ew-resize;
+    margin-left: -3px;
+    z-index: 2;
+}
+table.rc-table-resizing {
+    cursor: ew-resize;
+}
+table.rc-table-resizing thead,
+table.rc-table-resizing thead > th,
+table.rc-table-resizing thead > th > a {
+    cursor: ew-resize;
+}

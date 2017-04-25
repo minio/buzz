@@ -1,0 +1,39 @@
+* {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+
+    &:focus {
+        outline: -webkit-focus-ring-color auto 5px;
+        outline: none;
+    }
+}
+
+html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    font-family: @font-family;
+    background-color: @body-bg-color;
+    font-size: @font-size-base;
+    color: @text-color;
+    font-weight: @font-weight;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: @heading-font-family;
+    color: @heading-color;
+}
+
+a {
+    color: @link-color;
+    text-decoration: none;
+    
+    &:hover,
+    &:focus,
+    &:active {
+        color: @link-hover-color;
+    }
+}
