@@ -1,3 +1,19 @@
+/*
+ * Buggy, (C) 2016,2017 Minio, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package main
 
 import (
@@ -146,7 +162,6 @@ type Repoissue struct {
 }
 
 var gIssues []GitIssues
-var pRequests []GitIssues
 var token = ""
 
 func main() {
@@ -160,6 +175,7 @@ func main() {
 	}
 	auth()
 	http.HandleFunc("/getIssues", getIssues)
+	http.HandleFunc("/getPRs", getPRs)
 	fs := http.FileServer(http.Dir("static"))
 	http.Handle("/", fs)
 
@@ -220,9 +236,10 @@ func populateIssues(url string) {
 			gIssues = append(gIssues, eachGitIssue)
 			flag = 0
 		} else {
-
-			pRequests = append(pRequests, eachGitIssue)
-			flag = 0
+			/*fmt.Print(eachGitIssue.Number)
+			fmt.Print(":" + eachGitIssue.Title)
+			//pRequests = append(pRequests, eachGitIssue)
+			flag = 0*/
 		}
 	} // end of for
 
@@ -230,18 +247,18 @@ func populateIssues(url string) {
 
 func getIssues(w http.ResponseWriter, req *http.Request) {
 	gIssues = nil
-	pRequests = nil
-	populateIssues(`https://api.github.com/repos/minio/minio/issues?state=open&per_page=100&access_token=`)
-	populateIssues(`https://api.github.com/repos/minio/mc/issues?state=open&per_page=100&access_token=`)
 
+	// One Minio.
+	populateIssues(`https://api.github.com/repos/minio/minio/issues?state=open&per_page=100&milestone="Edge cache"&access_token=`)
+	populateIssues(`https://api.github.com/repos/minio/mc/issues?state=open&per_page=100&access_token=`)
 	populateIssues(`https://api.github.com/repos/minio/minio-go/issues?state=open&per_page=100&access_token=`)
 	populateIssues(`https://api.github.com/repos/minio/minio-js/issues?state=open&per_page=100&access_token=`)
 	populateIssues(`https://api.github.com/repos/minio/minio-java/issues?state=open&per_page=100&access_token=`)
 	populateIssues(`https://api.github.com/repos/minio/minio-py/issues?state=open&per_page=100&access_token=`)
-
 	populateIssues(`https://api.github.com/repos/minio/doctor/issues?state=open&per_page=100&access_token=`)
 	populateIssues(`https://api.github.com/repos/minio/bosh-release/issues?state=open&per_page=100&access_token=`)
 	populateIssues(`https://api.github.com/repos/minio/minfs/issues?state=open&per_page=100&access_token=`)
+	populateIssues(`https://api.github.com/repos/minio/minio-dotnet/issues?state=open&per_page=100&access_token=`)
 
 	js, err := json.Marshal(gIssues)
 	if err != nil {
