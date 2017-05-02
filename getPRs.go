@@ -1,5 +1,5 @@
 /*
- * Buggy, (C) 2016,2017 Minio, Inc.
+ * Buggy, (C) 2017 Minio, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -405,17 +405,6 @@ func populatePRs(url string) {
 		eachPRIssue.UpdatedAt = elem.UpdatedAt.Format(layout)
 		eachPRIssue.Repo = elem.Head.Repo.Name
 		eachPRIssue.ID = elem.ID
-
-		fmt.Println("-----------------------------------")
-		fmt.Print(eachPRIssue.Number)
-		fmt.Print(" : " + eachPRIssue.Title)
-		fmt.Print(eachPRIssue.CreatedAt)
-		fmt.Print(":")
-		fmt.Print(eachPRIssue.UpdatedAt)
-		fmt.Print(eachPRIssue.Repo)
-		fmt.Print(":")
-		fmt.Print(eachPRIssue.ID)
-		fmt.Println("-----------------------------------")
 		pRequests = append(pRequests, eachPRIssue)
 
 	} // end of for
@@ -424,16 +413,11 @@ func populatePRs(url string) {
 
 func getPRs(w http.ResponseWriter, req *http.Request) {
 	pRequests = nil
-	populatePRs(`https://api.github.com/repos/minio/minio/pulls?state=open&access_token=`)
-	populatePRs(`https://api.github.com/repos/minio/mc/pulls?state=open&access_token=`)
-	populatePRs(`https://api.github.com/repos/minio/minio-go/pulls?state=open&access_token=`)
-	populatePRs(`https://api.github.com/repos/minio/minio-js/pulls?state=open&access_token=`)
-	populatePRs(`https://api.github.com/repos/minio/minio-java/pulls?state=open&access_token=`)
-	populatePRs(`https://api.github.com/repos/minio/minio-py/pulls?state=open&access_token=`)
-	populatePRs(`https://api.github.com/repos/minio/doctor/pulls?state=open&access_token=`)
-	populatePRs(`https://api.github.com/repos/minio/bosh-release/pulls?state=open&access_token=`)
-	populatePRs(`https://api.github.com/repos/minio/minfs/pulls?state=open&access_token=`)
-	populatePRs(`https://api.github.com/repos/minio/minio-dotnet/pulls?state=open&access_token=`)
+	// One Minio.
+	for _, rName := range config.RepoNames {
+		populatePRs(`https://api.github.com/repos/` + rName + `/pulls?state=open&per_page=100&access_token=`)
+	}
+
 	js, err := json.Marshal(pRequests)
 	if err != nil {
 		fmt.Print(err)

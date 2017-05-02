@@ -1,0 +1,11 @@
+# This is a TOML document
+# Line breaks are OK when inside arrays
+repoNames = [
+  "minio/minio",
+  "minio/mc",  
+  "minio/minio-go",
+  "minio/minio-js",
+  "minio/minio-java",
+  "minio/minio-py",
+  "minio/minfs"
+]
