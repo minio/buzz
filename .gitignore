@@ -2,6 +2,7 @@
 *.o
 *.a
 *.so
+css/*.css
 
 # Folders
 _obj
