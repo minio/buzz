@@ -6,17 +6,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>GitApp Minio</title>
         
-        <link rel="icon" type="image/x-icon" href="/favicon.ico">
+        <link rel="icon" type="image/x-icon" href="favicon.ico">
         <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
         <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16" />
-         
-        <link rel="stylesheet" href="./css/app.min.css">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/humanize-plus/1.8.2/humanize.min.js"></script>
-
-
-        <link href="//fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
+        <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:400,500,700">
         <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
-         
+        <link rel="stylesheet" href="./css/app.min.css">
     </head>
 
     <body>
@@ -26,7 +21,6 @@
                 Buggy
             </a>
         </header>
-
  
         <section id="content">
             <div class="card">
@@ -34,7 +28,7 @@
                     <h2> Issue Table </h2>
                 </div>
 
-                <table class="table table--card table--bordered table--data">
+                <table class="table table--card table--bordered" id="table-issues">
                     <thead>
                     <tr>
                         <th width="10%">ID</th>
@@ -49,15 +43,12 @@
                 </table>
             </div>
 
-        </section>
-        
-        <section id="content">
             <div class="card">
                 <div class="card__header">
                     <h2> PR Table </h2>
                 </div>
 
-                <table class="table table--card table--bordered table--data-1">
+                <table class="table table--card table--bordered" id="table-prs">
                     <thead>
                     <tr>
                         <th width="10%">ID</th>
@@ -69,16 +60,11 @@
                     </thead>
                 </table>
             </div>
-
         </section>
 
         <script src="js/jquery.min.js"></script>
-        <script src="js/datatables/jquery.dataTables.js"></script>
-        <script src="js/datatables/dataTables.buttons.min.js"></script>
-        <script src="js/datatables/jszip.min.js"></script>
-        <script src="js/datatables/buttons.print.min.js"></script>
-        <script src="js/datatables/buttons.html5.min.js"></script>
-        <script src="js/datatables/colResizable-1.5.min.js"></script>
+        <script src="vendors/bower_components/col-resizable/colResizable-1.6.min.js"></script>
+        <script src="vendors/bower_components/datatables.net/js/jquery.dataTables.js"></script>
         <script src="js/tab.js"></script>
         <script src="js/functions.js"></script>
     </body>

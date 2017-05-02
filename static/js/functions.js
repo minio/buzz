@@ -1,10 +1,20 @@
 $(document).ready(function () {
-    // Initiate data table
-    $('.table--data').DataTable({
+
+    // Data Table
+    $('#table-issues').DataTable({
         "ajax": {
             "url": "http://localhost:7000/getIssues",
             "dataSrc": ""
         },
+        "initComplete": function(settings, json) {
+            // ColResize
+            $(this).colResizable({
+                fixed:true,
+                liveDrag:true,
+                marginLeft: '5px'
+            });
+        },
+        lengthMenu: [[15, 30, 60, 100, -1], ['15 Rows', '30 Rows', '60 Rows', '100 Rows', 'All']],
         "sDom": '<"dataTables__top"lf>rt<"dataTables__bottom"p><"clear">',
         "columns": [
             { data : "number" },
@@ -17,11 +27,20 @@ $(document).ready(function () {
         ]
     });
 
-    $('.table--data-1').DataTable({
+    $('#table-prs').DataTable({
         "ajax": {
             "url": "http://localhost:7000/getPRs",
             "dataSrc": ""
         },
+        "initComplete": function(settings, json) {
+            // ColResize
+            $(this).colResizable({
+                fixed:true,
+                liveDrag:true,
+                marginLeft: '5px'
+            });
+        },
+        lengthMenu: [[15, 30, 60, 100, -1], ['15 Rows', '30 Rows', '60 Rows', '100 Rows', 'All']],
         "sDom": '<"dataTables__top"lf>rt<"dataTables__bottom"p><"clear">',
         "columns": [
             { data : "number" },
