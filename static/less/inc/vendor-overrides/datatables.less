@@ -1,12 +1,3 @@
-#minio-data {
-    &.table--hidden {
-        .transition(all);
-        .transition-duration(500ms);
-        .translate3d(-100%, 0, 0);
-    }
-}
-
-
 .dataTables__top {
     margin: 45px 50px 42px;
     position: relative;
@@ -40,7 +31,6 @@
 
 .dataTables_filter {
     overflow: hidden;
-    padding-right: 40px;
     &:before {
         padding-top: 14px;
         content: '\f002';
@@ -51,7 +41,6 @@
 .dataTables_filter {
     font-size: 0;
     position: relative;
-    padding-right: 100px;
     &:before {
         font-family: @font-family-icon;
         position: absolute;
@@ -64,6 +53,27 @@
     .form-control {
         font-size: @font-size-base + 1;
         padding-left: 40px;
+    }
+
+    & > label {
+        input,
+        select {
+            .appearance(none);
+            font-size: @font-size-base;
+            background-color: @white;
+            padding: 5px 12px 6px 40px;
+            line-height: inherit;
+            border: 1px solid @input-border;
+            border-radius: 0;
+            width: 100%;
+            .transition(border-color);
+            .transition-duration(300ms);
+            height: 45px;
+
+            &:focus {
+                border-color: @input-border-focus;
+            }
+        }
     }
 }
 
@@ -102,13 +112,13 @@
     .transition(all);
     .transition-duration(300ms);
     cursor: pointer;
-    
+
     &.current {
         background-color: @pagination-button-active-bg;
         color: @white;
         cursor: default;
     }
-    
+
     &:not(.current) {
         &:hover,
         &:focus {
@@ -171,46 +181,4 @@
     height: 100%;
     background: rgba(255,255,255,0.6);
     font-size: 0;
-}
-
-.JColResizer {
-    table-layout: fixed;
-
-    td,
-    th {
-        overflow: hidden;
-    }
-}
-
-.JCLRgrips {
-    height: 0;
-    position: relative;
-}
-
-.JCLRgrip {
-    margin-left: -1px;
-    position: absolute;
-    z-index: 5;
-
-    .JColResizer {
-        position: absolute;
-        .opacity(0);
-        width: 3px;
-        height: 100%;
-        cursor: e-resize;
-        top: 0;
-    }
-}
-
-.JCLRLastGrip {
-    position: absolute;
-    width: 1px;
-}
-
-.JCLRgripDrag {
-    border-left: 1px dotted darken(@light-grey, 25%);
-}
-
-.JCLRFlex {
-    width: auto !important;
 }

@@ -1,0 +1,31 @@
+{
+  "name": "Buggy",
+  "homepage": "https://github.com/minio/buggy",
+  "authors": [
+    "Minio Inc."
+  ],
+  "description": "A prototype for github issue workflow management",
+  "main": "index.html",
+  "keywords": [
+    "buggy",
+    "github",
+    "issue",
+    "management",
+    "github",
+    "workflow"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "col-resizable": "^1.6.0",
+    "datatables.net": "^1.10.15",
+    "datatables.net-dt": "^3.2.2"
+  }
+}
