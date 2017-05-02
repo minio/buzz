@@ -9,7 +9,7 @@ $(document).ready(function () {
         "columns": [
             { data : "number" },
             { data : "title" },
-            { data : "name" },
+            { data : "Labels[name]" },
             { data : "login" },
             { data : "milestone"},
             { data : "state" },

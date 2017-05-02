@@ -21,15 +21,21 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"os"
 	"time"
 )
+
+// Label - holds issue labels
+type Label struct {
+	Name  string `json:"name"`
+	Color string `json:"color"`
+}
 
 // GitIssues - holds only relevant issues
 type GitIssues struct {
 	Number    int    `json:"number"`
 	Title     string `json:"title"`
-	Labels    string `json:"name"`
+	Link      string `json:"html_url"`
+	Labels    []Label
 	Assignees string `json:"login"`
 	Milestone string `json:"milestone"`
 	State     string `json:"state"`
@@ -162,40 +168,6 @@ type Repoissue struct {
 }
 
 var gIssues []GitIssues
-var token = ""
-
-func main() {
-
-	token = os.Getenv("GIT_TOKEN")
-	fmt.Println(token)
-	if token == "" {
-		fmt.Println("Git Token is not set")
-		os.Exit(101)
-
-	}
-	auth()
-	http.HandleFunc("/getIssues", getIssues)
-	http.HandleFunc("/getPRs", getPRs)
-	fs := http.FileServer(http.Dir("static"))
-	http.Handle("/", fs)
-
-	http.ListenAndServe(":7000", nil)
-
-}
-
-func exitOnErr(err error) {
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-}
-
-func auth() {
-	postURL := `https://api.github.com/?access_token=` + token
-	_, err := http.Get(postURL)
-	exitOnErr(err)
-
-}
 
 func populateIssues(url string) {
 	pullURL := url + token
@@ -210,9 +182,9 @@ func populateIssues(url string) {
 	mIssues := []Repoissue{}
 	json.Unmarshal(htmlData, &mIssues)
 
-	//json.Unmarshal(htmlData, &gIssues)
 	var flag int
 
+	// iterate through each issue and scrape what buggy needs.
 	for _, elem := range mIssues {
 		eachGitIssue := GitIssues{}
 
@@ -222,9 +194,15 @@ func populateIssues(url string) {
 			eachGitIssue.Number = elem.Number
 			eachGitIssue.Title = elem.Title
 			eachGitIssue.Repo = elem.RepositoryURL
+			eachGitIssue.Link = elem.HTMLURL
 
+			// iterate to get all labels and colors.
 			for _, labe := range elem.Labels {
-				eachGitIssue.Labels += labe.Name + " "
+				eachGitIssue.Labels = append(eachGitIssue.Labels, Label{
+					Name:  labe.Name,
+					Color: labe.Color,
+				})
+
 			}
 			for _, assignee := range elem.Assignees {
 				eachGitIssue.Assignees += assignee.Login + " "
@@ -236,10 +214,8 @@ func populateIssues(url string) {
 			gIssues = append(gIssues, eachGitIssue)
 			flag = 0
 		} else {
-			/*fmt.Print(eachGitIssue.Number)
-			fmt.Print(":" + eachGitIssue.Title)
-			//pRequests = append(pRequests, eachGitIssue)
-			flag = 0*/
+			// this is not an open issue so don't do anything but continue.
+			flag = 0
 		}
 	} // end of for
 
@@ -249,16 +225,9 @@ func getIssues(w http.ResponseWriter, req *http.Request) {
 	gIssues = nil
 
 	// One Minio.
-	populateIssues(`https://api.github.com/repos/minio/minio/issues?state=open&per_page=100&milestone="Edge cache"&access_token=`)
-	populateIssues(`https://api.github.com/repos/minio/mc/issues?state=open&per_page=100&access_token=`)
-	populateIssues(`https://api.github.com/repos/minio/minio-go/issues?state=open&per_page=100&access_token=`)
-	populateIssues(`https://api.github.com/repos/minio/minio-js/issues?state=open&per_page=100&access_token=`)
-	populateIssues(`https://api.github.com/repos/minio/minio-java/issues?state=open&per_page=100&access_token=`)
-	populateIssues(`https://api.github.com/repos/minio/minio-py/issues?state=open&per_page=100&access_token=`)
-	populateIssues(`https://api.github.com/repos/minio/doctor/issues?state=open&per_page=100&access_token=`)
-	populateIssues(`https://api.github.com/repos/minio/bosh-release/issues?state=open&per_page=100&access_token=`)
-	populateIssues(`https://api.github.com/repos/minio/minfs/issues?state=open&per_page=100&access_token=`)
-	populateIssues(`https://api.github.com/repos/minio/minio-dotnet/issues?state=open&per_page=100&access_token=`)
+	for _, rName := range config.RepoNames {
+		populateIssues(`https://api.github.com/repos/` + rName + `/issues?state=open&per_page=100&access_token=`)
+	}
 
 	js, err := json.Marshal(gIssues)
 	if err != nil {
