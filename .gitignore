@@ -2,7 +2,6 @@
 *.o
 *.a
 *.so
-css/*.css
 
 # Folders
 _obj
@@ -25,3 +24,4 @@ _testmain.go
 *.test
 *.prof
 yarn.lock
+buggy-1
