@@ -12,7 +12,21 @@ $(document).ready(function () {
         "columns": [
             { data : "number" },
             { data : "title" },
-            { data : "Labels[name]" },
+            {
+                data : "Labels",
+                "render": function(data) {
+                    if(data !== null) {
+                        var tag = '';
+                        $.each(data, function(k, value) {
+                            tag += "<div class='tableTables__tag' style='background-color:#"+value.color+"'>" + value.name + "</div>";
+                        });
+                        return tag;
+                    }
+                    else {
+                        return "";
+                    }
+                }
+            },
             { data : "login" },
             { data : "milestone"},
             { data : "state" },

@@ -857,6 +857,14 @@ a:active {
   background: rgba(255, 255, 255, 0.6);
   font-size: 0;
 }
+.tableTables__tag {
+  display: inline-block;
+  border-radius: 2px;
+  color: #fff;
+  padding: 4px 8px 5px;
+  margin: 2px 4px 2px 0;
+  font-size: 13px;
+}
 .JCLRgrip {
   margin-left: 0 !important;
 }
