@@ -1,14 +1,19 @@
 # buggy
 A prototype for Github workflow management 
 
-## Install third party vendors
+## Install Dependencies
 ```
-$ cd vendors
+$ yarn install
+```
+
+
+## Install Bower Components
+```
+$ cd static/vendors
 $ bower install
 ```
 
 ## Build CSS
-
 ```
 $ yarn build
 ```
