@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    // Issues
+    // Issues Table
     var dataTableIssues = $('#table-issues').DataTable({
         "ajax": {
             "url": "http://localhost:7000/getIssues",
@@ -51,5 +51,12 @@ $(document).ready(function () {
     $('.table').colResizable({
         liveDrag:true,
         resizeMode: 'flex'
+    });
+
+
+    // Issues table row link
+    $('body').on('click', '#table-issues tbody tr', function () {
+        var data = dataTableIssues.row( this ).data();
+        window.open(data["html_url"], '_blank');
     });
 });
