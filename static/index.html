@@ -28,19 +28,22 @@
                     <h2> Issue Table </h2>
                 </div>
 
-                <table class="table table--card table--bordered" id="table-issues">
-                    <thead>
-                    <tr>
-                        <th width="10%">ID</th>
-                        <th width="30%">Description</th>
-                        <th width="10%">Labels</th>
-                        <th width="5%">Assignee</th>
-                        <th width="5%">Milestone</th>
-                        <th width="10%">State</th>
-                        <th width="30%">Repo</th>
-                    </tr>
-                    </thead>
-                </table>
+                <div class="card__body">
+                    <table class="table table--bordered table--clickable" id="table-issues">
+                        <thead>
+                        <tr>
+                            <th width="50">ID</th>
+                            <th>Description</th>
+                            <th width="150">Labels</th>
+                            <th width="150">Assignee</th>
+                            <th width="150">Milestone</th>
+                            <th width="100">State</th>
+                            <th>Repo</th>
+                            <th>HTML</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
             </div>
 
             <div class="card">
@@ -48,21 +51,23 @@
                     <h2> PR Table </h2>
                 </div>
 
-                <table class="table table--card table--bordered" id="table-prs">
-                    <thead>
-                    <tr>
-                        <th width="10%">ID</th>
-                        <th width="40%">Description</th>
-                        <th width="20%">Created At</th>
-                        <th width="20%">Updated At</th>
-                        <th width="10%">Repo Name</th>
-                    </tr>
-                    </thead>
-                </table>
+                <div class="card__body">
+                    <table class="table table--bordered" id="table-prs">
+                        <thead>
+                        <tr>
+                            <th width="100">ID</th>
+                            <th>Description</th>
+                            <th>Created At</th>
+                            <th>Updated At</th>
+                            <th>Repo Name</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
             </div>
         </section>
 
-        <script src="js/jquery.min.js"></script>
+        <script src="vendors/bower_components/jquery/dist/jquery.min.js"></script>
         <script src="vendors/bower_components/col-resizable/colResizable-1.6.min.js"></script>
         <script src="vendors/bower_components/datatables.net/js/jquery.dataTables.js"></script>
         <script src="js/tab.js"></script>

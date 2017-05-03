@@ -1,5 +1,10 @@
+.dataTables__inner {
+    width: 100%;
+    overflow-x: auto;
+}
+
 .dataTables__top {
-    margin: 45px 50px 42px;
+    margin: 0 0 @card-padding-y;
     position: relative;
     .clearfix();
 }
@@ -82,7 +87,7 @@
 }
 
 .dataTables_paginate {
-    padding: 50px 20px;
+    padding: @card-padding-y 20px 0;
     text-align: center;
 
     & > span {

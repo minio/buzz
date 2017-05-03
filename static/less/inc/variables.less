@@ -53,7 +53,7 @@
 @purple: #d066e2;
 
 // Form
-@input-border: #f0efef;
+@input-border: #f1f0f0;
 @input-border-focus: #99dfff;
 @input-font-size: @font-size-base;
 
@@ -65,7 +65,11 @@
 // Card
 @card-bg: @white;
 @card-shadow: 0 1px 1px rgba(0,0,0,0.08);
+@card-padding-x: 40px;
+@card-padding-y: 35px;
 
 // Table
 @table-cell-color: @heading-color;
-@table-hover-bg: #fff8e1;
+@table-border-color: #f1f0f0;
+@table-header-bg: lighten(@table-border-color, 4%);
+@table-hover-bg: @table-header-bg;
