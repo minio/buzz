@@ -56,6 +56,7 @@ $(document).ready(function () {
             { data : "title" },
             { data : "created_at" },
             { data : "updated_at"},
+            { data : "age"},
             { data : "repo_name"}
         ]
     });

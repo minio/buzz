@@ -7,6 +7,7 @@
 _obj
 _test
 node_modules
+static/vendors/bower_components/
 
 # Architecture specific extensions/prefixes
 *.[568vq]
@@ -25,3 +26,4 @@ _testmain.go
 *.prof
 yarn.lock
 buggy-1
+buggy

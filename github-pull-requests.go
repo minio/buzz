@@ -35,6 +35,8 @@ type GitPRs struct {
 	CreatedAt string `json:"created_at"`
 	UpdatedAt string `json:"updated_at"`
 	Repo      string `json:"repo_name"`
+	Link      string `json:"html_url"`
+	Age       int    `json:"age"`
 }
 
 // PRIssues - holds all PRs
@@ -403,8 +405,11 @@ func populatePRs(url string) {
 
 		eachPRIssue.CreatedAt = elem.CreatedAt.Format(layout)
 		eachPRIssue.UpdatedAt = elem.UpdatedAt.Format(layout)
+		delta := elem.UpdatedAt.Sub(elem.CreatedAt)
+		eachPRIssue.Age = (int)(delta.Hours())
 		eachPRIssue.Repo = elem.Head.Repo.Name
 		eachPRIssue.ID = elem.ID
+		eachPRIssue.Link = elem.HTMLURL
 		pRequests = append(pRequests, eachPRIssue)
 
 	} // end of for
