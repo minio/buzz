@@ -30,8 +30,8 @@ $(document).ready(function () {
             { data : "login" },
             { data : "milestone"},
             { data : "state" },
-            { data : "repository_url"},
-            { data : "html_url"}
+            { data : "hours"},
+            { data : "repository_url"}
         ],
         "columnDefs": [
             {
@@ -56,7 +56,7 @@ $(document).ready(function () {
             { data : "title" },
             { data : "created_at" },
             { data : "updated_at"},
-            { data : "age"},
+            { data : "hours"},
             { data : "repo_name"}
         ]
     });

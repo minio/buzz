@@ -39,38 +39,22 @@ type GitIssues struct {
 	Assignees string `json:"login"`
 	Milestone string `json:"milestone"`
 	State     string `json:"state"`
+	CreatedAt string `json:"created_at"`
+	UpdatedAt string `json:"updated_at"`
 	Repo      string `json:"repository_url"`
+	Hours     int64  `json:"hours"`
 }
 
-// Repoissue - holds all issues per repo.
-type Repoissue struct {
+// RepoIssues - holds all issues per repo.
+type RepoIssues struct {
 	URL           string `json:"url"`
 	RepositoryURL string `json:"repository_url"`
-	LabelsURL     string `json:"labels_url"`
-	CommentsURL   string `json:"comments_url"`
-	EventsURL     string `json:"events_url"`
 	HTMLURL       string `json:"html_url"`
 	ID            int    `json:"id"`
 	Number        int    `json:"number"`
 	Title         string `json:"title"`
 	User          struct {
-		Login             string `json:"login"`
-		ID                int    `json:"id"`
-		AvatarURL         string `json:"avatar_url"`
-		GravatarID        string `json:"gravatar_id"`
-		URL               string `json:"url"`
-		HTMLURL           string `json:"html_url"`
-		FollowersURL      string `json:"followers_url"`
-		FollowingURL      string `json:"following_url"`
-		GistsURL          string `json:"gists_url"`
-		StarredURL        string `json:"starred_url"`
-		SubscriptionsURL  string `json:"subscriptions_url"`
-		OrganizationsURL  string `json:"organizations_url"`
-		ReposURL          string `json:"repos_url"`
-		EventsURL         string `json:"events_url"`
-		ReceivedEventsURL string `json:"received_events_url"`
-		Type              string `json:"type"`
-		SiteAdmin         bool   `json:"site_admin"`
+		Login string `json:"login"`
 	} `json:"user"`
 	Labels []struct {
 		ID      int    `json:"id"`
@@ -79,91 +63,21 @@ type Repoissue struct {
 		Color   string `json:"color"`
 		Default bool   `json:"default"`
 	} `json:"labels"`
-	State    string `json:"state"`
-	Locked   bool   `json:"locked"`
 	Assignee struct {
-		Login             string `json:"login"`
-		ID                int    `json:"id"`
-		AvatarURL         string `json:"avatar_url"`
-		GravatarID        string `json:"gravatar_id"`
-		URL               string `json:"url"`
-		HTMLURL           string `json:"html_url"`
-		FollowersURL      string `json:"followers_url"`
-		FollowingURL      string `json:"following_url"`
-		GistsURL          string `json:"gists_url"`
-		StarredURL        string `json:"starred_url"`
-		SubscriptionsURL  string `json:"subscriptions_url"`
-		OrganizationsURL  string `json:"organizations_url"`
-		ReposURL          string `json:"repos_url"`
-		EventsURL         string `json:"events_url"`
-		ReceivedEventsURL string `json:"received_events_url"`
-		Type              string `json:"type"`
-		SiteAdmin         bool   `json:"site_admin"`
+		Login string `json:"login"`
 	} `json:"assignee"`
 	Assignees []struct {
-		Login             string `json:"login"`
-		ID                int    `json:"id"`
-		AvatarURL         string `json:"avatar_url"`
-		GravatarID        string `json:"gravatar_id"`
-		URL               string `json:"url"`
-		HTMLURL           string `json:"html_url"`
-		FollowersURL      string `json:"followers_url"`
-		FollowingURL      string `json:"following_url"`
-		GistsURL          string `json:"gists_url"`
-		StarredURL        string `json:"starred_url"`
-		SubscriptionsURL  string `json:"subscriptions_url"`
-		OrganizationsURL  string `json:"organizations_url"`
-		ReposURL          string `json:"repos_url"`
-		EventsURL         string `json:"events_url"`
-		ReceivedEventsURL string `json:"received_events_url"`
-		Type              string `json:"type"`
-		SiteAdmin         bool   `json:"site_admin"`
+		Login string `json:"login"`
 	} `json:"assignees"`
 	Milestone struct {
-		URL         string `json:"url"`
-		HTMLURL     string `json:"html_url"`
-		LabelsURL   string `json:"labels_url"`
-		ID          int    `json:"id"`
-		Number      int    `json:"number"`
-		Title       string `json:"title"`
-		Description string `json:"description"`
-		Creator     struct {
-			Login             string `json:"login"`
-			ID                int    `json:"id"`
-			AvatarURL         string `json:"avatar_url"`
-			GravatarID        string `json:"gravatar_id"`
-			URL               string `json:"url"`
-			HTMLURL           string `json:"html_url"`
-			FollowersURL      string `json:"followers_url"`
-			FollowingURL      string `json:"following_url"`
-			GistsURL          string `json:"gists_url"`
-			StarredURL        string `json:"starred_url"`
-			SubscriptionsURL  string `json:"subscriptions_url"`
-			OrganizationsURL  string `json:"organizations_url"`
-			ReposURL          string `json:"repos_url"`
-			EventsURL         string `json:"events_url"`
-			ReceivedEventsURL string `json:"received_events_url"`
-			Type              string `json:"type"`
-			SiteAdmin         bool   `json:"site_admin"`
-		} `json:"creator"`
-		OpenIssues   int         `json:"open_issues"`
-		ClosedIssues int         `json:"closed_issues"`
-		State        string      `json:"state"`
-		CreatedAt    time.Time   `json:"created_at"`
-		UpdatedAt    time.Time   `json:"updated_at"`
-		DueOn        time.Time   `json:"due_on"`
-		ClosedAt     interface{} `json:"closed_at"`
+		Title string `json:"title"`
+		State string `json:"state"`
 	} `json:"milestone"`
-	Comments    int         `json:"comments"`
 	CreatedAt   time.Time   `json:"created_at"`
 	UpdatedAt   time.Time   `json:"updated_at"`
 	ClosedAt    interface{} `json:"closed_at"`
-	Body        string      `json:"body"`
 	PullRequest struct {
-		URL      string `json:"url"`
-		HTMLURL  string `json:"html_url"`
-		DiffURL  string `json:"diff_url"`
-		PatchURL string `json:"patch_url"`
+		URL string `json:"url"`
 	} `json:"pull_request"`
 }
 
@@ -179,7 +93,7 @@ func populateIssues(url string) {
 	htmlData, err := ioutil.ReadAll(resp.Body)
 	exitOnErr(err)
 
-	mIssues := []Repoissue{}
+	mIssues := []RepoIssues{}
 	json.Unmarshal(htmlData, &mIssues)
 
 	var flag int
@@ -195,6 +109,10 @@ func populateIssues(url string) {
 			eachGitIssue.Title = elem.Title
 			eachGitIssue.Repo = elem.RepositoryURL
 			eachGitIssue.Link = elem.HTMLURL
+			eachGitIssue.CreatedAt = elem.CreatedAt.Format(buggyTimeLayout)
+			eachGitIssue.UpdatedAt = elem.UpdatedAt.Format(buggyTimeLayout)
+			delta := elem.UpdatedAt.Sub(elem.CreatedAt)
+			eachGitIssue.Hours = int64(delta.Hours())
 
 			// iterate to get all labels and colors.
 			for _, labe := range elem.Labels {
@@ -202,7 +120,6 @@ func populateIssues(url string) {
 					Name:  labe.Name,
 					Color: labe.Color,
 				})
-
 			}
 			for _, assignee := range elem.Assignees {
 				eachGitIssue.Assignees += assignee.Login + " "
@@ -218,17 +135,14 @@ func populateIssues(url string) {
 			flag = 0
 		}
 	} // end of for
-
 }
 
 func getIssues(w http.ResponseWriter, req *http.Request) {
 	gIssues = nil
-
 	// One Minio.
 	for _, rName := range config.RepoNames {
 		populateIssues(`https://api.github.com/repos/` + rName + `/issues?state=open&per_page=100&access_token=`)
 	}
-
 	js, err := json.Marshal(gIssues)
 	if err != nil {
 		fmt.Print(err)
