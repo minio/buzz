@@ -3,7 +3,7 @@ $(document).ready(function () {
     // Issues Table
     var dataTableIssues = $('#table-issues').DataTable({
         "ajax": {
-            "url": "http://localhost:7000/getIssues",
+            "url": "/getIssues",
             "dataSrc": ""
         },
         lengthMenu: [[15, 30, 60, 100, -1], ['15 Rows', '30 Rows', '60 Rows', '100 Rows', 'All']],
@@ -45,7 +45,7 @@ $(document).ready(function () {
     // PR Table
     $('#table-prs').DataTable({
         "ajax": {
-            "url": "http://localhost:7000/getPRs",
+            "url": "/getPRs",
             "dataSrc": ""
         },
         "autoWidth": false,
