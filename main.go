@@ -17,6 +17,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"os"
@@ -24,6 +25,7 @@ import (
 	"github.com/BurntSushi/toml"
 )
 
+// token is the github access token. It's sent with each request.
 var token = ""
 
 // TomlConfig - holds all the repo names
@@ -33,27 +35,22 @@ type tomlConfig struct {
 
 var config tomlConfig
 
+const buggyTimeLayout = "Jan 2, 2006 at 3:04pm (PST)"
+
 func main() {
-
 	token = os.Getenv("GIT_TOKEN")
-	fmt.Println(token)
 	if token == "" {
-		fmt.Println("Git Token is not set")
-		os.Exit(101)
-
+		exitOnErr(errors.New("Github token is not set"))
 	}
 	if _, err := toml.DecodeFile("repo.toml", &config); err != nil {
 		exitOnErr(err)
 	}
-
-	auth()
+	tokenAuthenticate()
 	http.HandleFunc("/getIssues", getIssues)
 	http.HandleFunc("/getPRs", getPRs)
 	fs := http.FileServer(http.Dir("static"))
 	http.Handle("/", fs)
-
 	http.ListenAndServe(":7000", nil)
-
 }
 
 func exitOnErr(err error) {
@@ -63,7 +60,7 @@ func exitOnErr(err error) {
 	}
 }
 
-func auth() {
+func tokenAuthenticate() {
 	postURL := `https://api.github.com/?access_token=` + token
 	_, err := http.Get(postURL)
 	exitOnErr(err)
