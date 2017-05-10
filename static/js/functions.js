@@ -78,9 +78,11 @@ $(document).ready(function () {
 
 
     // Issues table row link
-    $('body').on('click', '#table-issues tbody tfr', function () {
-        var data = dataTableIssues.row( this ).data();
-        window.open(data["html_url"], '_blank');
+    $('body').on('click', '#table-issues tbody tr', function (e) {
+        if(!$(e.target).is('.set-eta__input')) {
+            var data = dataTableIssues.row( this ).data();
+            window.open(data["html_url"], '_blank');
+        }
     });
 
     $('body').on('click', '.set-eta__input', function () {
