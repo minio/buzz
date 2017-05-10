@@ -28,6 +28,7 @@
     "datatables.net": "^1.10.15",
     "datatables.net-dt": "^3.2.2",
     "jquery": "^3.2.1",
-    "flatpickr": "flatpickr-calendar#^2.6.1"
+    "flatpickr": "flatpickr-calendar#^2.6.1",
+    "material-design-iconic-font": "^2.2.0"
   }
 }
