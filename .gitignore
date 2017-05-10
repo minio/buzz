@@ -27,3 +27,5 @@ _testmain.go
 yarn.lock
 buggy-1
 buggy
+/static/css/app.css
+/static/css/app.min.css

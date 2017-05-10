@@ -29,16 +29,14 @@
     }
 
     &:before {
-        content: '\f0c9';
-        padding-top: 16px;
+        content: '\f160';
     }
 }
 
 .dataTables_filter {
     overflow: hidden;
     &:before {
-        padding-top: 14px;
-        content: '\f002';
+        content: '\f1c3';
     }
 }
 
@@ -46,13 +44,18 @@
 .dataTables_filter {
     font-size: 0;
     position: relative;
+
     &:before {
         font-family: @font-family-icon;
         position: absolute;
         top: 0;
+        bottom: 0;
+        height: 17px;
         left: 18px;
+        margin: auto;
         color: @heading-color;
-        font-size: @font-size-base;
+        font-size: 17px;
+        line-height: 100%;
     }
 
     .form-control {
@@ -167,14 +170,6 @@
 
 .data-table-toggled {
     overflow: hidden;
-
-    .dataTables__menu {
-        .fa-expand {
-            &:before {
-                content: '\f066';
-            }
-        }
-    }
 }
 
 .dataTables_processing {
