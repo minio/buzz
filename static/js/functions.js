@@ -35,11 +35,19 @@ $(document).ready(function () {
         ],
         "columnDefs": [
             {
-                "targets": [ -1 ],
-                "visible": false,
-                "searchable": false
+                "targets": [ 8 ],
+                "data": null,
+                "defaultContent": "<div class='set-eta'><input class='set-eta__input' type='text' placeholder='Set ETA' /></div>"
             }
-        ]
+        ],
+        "initComplete": function (settings, json) {
+
+        },
+        "rowCallback": function( row, data, index ) {
+            if ( data[4] == "A" ) {
+                $('td:eq(4)', row).html( '<b>A</b>' );
+            }
+        }
     });
 
     // PR Table
@@ -70,8 +78,30 @@ $(document).ready(function () {
 
 
     // Issues table row link
-    $('body').on('click', '#table-issues tbody tr', function () {
+    $('body').on('click', '#table-issues tbody tfr', function () {
         var data = dataTableIssues.row( this ).data();
         window.open(data["html_url"], '_blank');
+    });
+
+    $('body').on('click', '.set-eta__input', function () {
+        if(!$(this).hasClass('set-eta__input--active')) {
+            // Remove any previous instances
+            $('.flatpickr-calendar').remove();
+
+            // Add/remove active class to identify active instance
+            $('.set-eta__input').removeClass('set-eta__input--active')
+            $(this).addClass('set-eta__input--active');
+
+            // Get current date
+            var defaultDate = $(this).val() || '';
+
+            // Initiate the picker
+            $(this).flatpickr({
+                defaultDate: defaultDate,
+                enableTime: true,
+                nextArrow: '<i class="zmdi zmdi-long-arrow-right" />',
+                prevArrow: '<i class="zmdi zmdi-long-arrow-left" />'
+            }).open();
+        }
     });
 });

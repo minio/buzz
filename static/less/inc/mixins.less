@@ -119,3 +119,12 @@
         background-size: @width-1x @height-1x;
     }
 }
+
+// User select
+.user-select(@user-select) {
+    -webkit-touch-callout: @user-select;
+    -webkit-user-select: @user-select;
+    -moz-user-select: @user-select;
+    -ms-user-select: @user-select;
+    user-select: @user-select;
+}
