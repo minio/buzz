@@ -3,13 +3,8 @@
     border: 0;
     box-shadow: @dropdown-box-shadow;
     width: auto;
-    margin-top: -2px;
-    .user-select(none);
 
-    &:before,
-    &:after {
-        display: none;
-    }
+    .user-select(none);
 
     &.showTimeInput {
         &.hasTime {
@@ -18,6 +13,19 @@
                 height: 60px;
             }
         }
+    }
+
+    &.arrowTop {
+        margin-top: -2px;
+
+        &:before,
+        &:after {
+            border-bottom-color: @header-bg;
+        }
+    }
+
+    &.arrowBottom {
+        margin-top: 2px;
     }
 }
 
