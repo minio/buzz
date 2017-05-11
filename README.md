@@ -1,4 +1,4 @@
-# buggy
+# Buzz
 A prototype for Github workflow management 
 
 ## Install Dependencies
@@ -23,7 +23,7 @@ $ yarn build
 
 ```
 $ go build
-$ GIT_TOKEN="YOUR GITHUB ACCESS TOKEN" ./buggy
+$ GIT_TOKEN="YOUR GITHUB ACCESS TOKEN" ./buzz
 ```
 
 Point your browser to http://localhost:7000
