@@ -1,5 +1,5 @@
 /*
- * Buggy, (C) 2016,2017 Minio, Inc.
+ * Buzz, (C) 2016,2017 Minio, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ type tomlConfig struct {
 
 var config tomlConfig
 
-const buggyTimeLayout = "Jan 2, 2006 at 3:04pm (PST)"
+const buzzTimeLayout = "Jan 2, 2006 at 3:04pm (PST)"
 
 func main() {
 	token = os.Getenv("GIT_TOKEN")
