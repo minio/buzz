@@ -1,4 +1,5 @@
-# buzz
+
+# Buzz
 A prototype for Github workflow management 
 
 ## Install Dependencies
