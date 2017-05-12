@@ -1,5 +1,5 @@
 /*
- * Buggy, (C) 2017 Minio, Inc.
+ * Buzz, (C) 2017 Minio, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -90,8 +90,8 @@ func populatePRs(url string) {
 		for _, assignee := range elem.Assignees {
 			eachPRIssue.Assignees += assignee.Login + " "
 		}
-		eachPRIssue.CreatedAt = elem.CreatedAt.Format(buggyTimeLayout)
-		eachPRIssue.UpdatedAt = elem.UpdatedAt.Format(buggyTimeLayout)
+		eachPRIssue.CreatedAt = elem.CreatedAt.Format(buzzTimeLayout)
+		eachPRIssue.UpdatedAt = elem.UpdatedAt.Format(buzzTimeLayout)
 		delta := elem.UpdatedAt.Sub(elem.CreatedAt)
 		eachPRIssue.Hours = int64(delta.Hours())
 		eachPRIssue.Repo = elem.Head.Repo.Name

@@ -25,7 +25,7 @@ _testmain.go
 *.test
 *.prof
 yarn.lock
-buggy-1
-buggy
+buzz-1
+buzz
 /static/css/app.css
 /static/css/app.min.css

@@ -1,5 +1,5 @@
 /*
- * Buggy, (C) 2016,2017 Minio, Inc.
+ * Buzz, (C) 2016,2017 Minio, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -98,7 +98,7 @@ func populateIssues(url string) {
 
 	var flag int
 
-	// iterate through each issue and scrape what buggy needs.
+	// iterate through each issue and scrape what buzz needs.
 	for _, elem := range mIssues {
 		eachGitIssue := GitIssues{}
 
@@ -109,8 +109,8 @@ func populateIssues(url string) {
 			eachGitIssue.Title = elem.Title
 			eachGitIssue.Repo = elem.RepositoryURL
 			eachGitIssue.Link = elem.HTMLURL
-			eachGitIssue.CreatedAt = elem.CreatedAt.Format(buggyTimeLayout)
-			eachGitIssue.UpdatedAt = elem.UpdatedAt.Format(buggyTimeLayout)
+			eachGitIssue.CreatedAt = elem.CreatedAt.Format(buzzTimeLayout)
+			eachGitIssue.UpdatedAt = elem.UpdatedAt.Format(buzzTimeLayout)
 			delta := elem.UpdatedAt.Sub(elem.CreatedAt)
 			eachGitIssue.Hours = int64(delta.Hours())
 

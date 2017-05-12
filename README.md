@@ -1,3 +1,4 @@
+
 # Buzz
 A prototype for Github workflow management 
 
@@ -19,7 +20,7 @@ $ yarn build
 ```
 
 
-## Starting Buggy Server
+## Starting Buzz Server
 
 ```
 $ go build

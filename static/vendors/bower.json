@@ -1,13 +1,13 @@
 {
-  "name": "Buggy",
-  "homepage": "https://github.com/minio/buggy",
+  "name": "Buzz",
+  "homepage": "https://github.com/minio/buzz",
   "authors": [
     "Minio Inc."
   ],
   "description": "A prototype for github issue workflow management",
   "main": "index.html",
   "keywords": [
-    "buggy",
+    "buzz",
     "github",
     "issue",
     "management",
