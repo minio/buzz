@@ -30,6 +30,7 @@ type GitPRs struct {
 	ID        int    `json:"id"`
 	Title     string `json:"title"`
 	Labels    string `json:"name"`
+	Sender    string `json:"sender"`
 	Assignees string `json:"login"`
 	State     string `json:"state"`
 	CreatedAt string `json:"created_at"`
@@ -86,7 +87,7 @@ func populatePRs(url string) {
 		eachPRIssue := GitPRs{}
 		eachPRIssue.Number = elem.Number
 		eachPRIssue.Title = elem.Title
-
+		eachPRIssue.Sender = elem.Head.User.Login
 		for _, assignee := range elem.Assignees {
 			eachPRIssue.Assignees += assignee.Login + " "
 		}
