@@ -63,7 +63,6 @@ $(document).ready(function () {
             { data : "number" },
             { data : "title" },
             { data : "sender"},
-            { data : "created_at" },
             { data : "updated_at"},
             { data : "hours"},
             { data : "repo_name"}

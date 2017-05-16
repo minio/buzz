@@ -33,11 +33,11 @@ type GitPRs struct {
 	Sender    string `json:"sender"`
 	Assignees string `json:"login"`
 	State     string `json:"state"`
-	CreatedAt string `json:"created_at"`
 	UpdatedAt string `json:"updated_at"`
 	Repo      string `json:"repo_name"`
 	Link      string `json:"html_url"`
 	Hours     int64  `json:"hours"`
+	Reviewers []ReviewStatus
 }
 
 // PRIssues - holds all PRs
@@ -70,7 +70,7 @@ type PRIssues struct {
 
 var pRequests []GitPRs
 
-func populatePRs(url string) {
+func populatePRs(rName string, url string) {
 	pullURL := url + token
 	fmt.Println("Fetching from....", pullURL)
 	resp, err := http.Get(pullURL)
@@ -91,13 +91,13 @@ func populatePRs(url string) {
 		for _, assignee := range elem.Assignees {
 			eachPRIssue.Assignees += assignee.Login + " "
 		}
-		eachPRIssue.CreatedAt = elem.CreatedAt.Format(buzzTimeLayout)
 		eachPRIssue.UpdatedAt = elem.UpdatedAt.Format(buzzTimeLayout)
 		delta := elem.UpdatedAt.Sub(elem.CreatedAt)
 		eachPRIssue.Hours = int64(delta.Hours())
 		eachPRIssue.Repo = elem.Head.Repo.Name
 		eachPRIssue.ID = elem.ID
 		eachPRIssue.Link = elem.HTMLURL
+		eachPRIssue.Reviewers = getReviewers(eachPRIssue.Repo, eachPRIssue.Number)
 		pRequests = append(pRequests, eachPRIssue)
 	} // end of for
 }
@@ -106,7 +106,7 @@ func getPRs(w http.ResponseWriter, req *http.Request) {
 	pRequests = nil
 	// One Minio.
 	for _, rName := range config.RepoNames {
-		populatePRs(`https://api.github.com/repos/` + rName + `/pulls?state=open&per_page=100&access_token=`)
+		populatePRs(rName, `https://api.github.com/repos/`+rName+`/pulls?state=open&per_page=100&access_token=`)
 	}
 	js, err := json.Marshal(pRequests)
 	if err != nil {
