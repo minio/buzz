@@ -17,12 +17,16 @@
 package main
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"net/http"
 	"os"
 
+	"golang.org/x/oauth2"
+
 	"github.com/BurntSushi/toml"
+	"github.com/google/go-github/github"
 )
 
 // token is the github access token. It's sent with each request.
@@ -34,8 +38,10 @@ type tomlConfig struct {
 }
 
 var config tomlConfig
+var buzzClient *github.Client
+var ctx = context.Background()
 
-const buzzTimeLayout = "Jan 2, 2006 at 3:04pm (PST)"
+const buzzTimeLayout = "Jan 2, 2006 at 3:04pm"
 
 func main() {
 	token = os.Getenv("GIT_TOKEN")
@@ -46,6 +52,14 @@ func main() {
 		exitOnErr(err)
 	}
 	tokenAuthenticate()
+
+	ts := oauth2.StaticTokenSource(
+		&oauth2.Token{AccessToken: token},
+	)
+	tc := oauth2.NewClient(ctx, ts)
+
+	buzzClient = github.NewClient(tc)
+
 	http.HandleFunc("/getIssues", getIssues)
 	http.HandleFunc("/getPRs", getPRs)
 	fs := http.FileServer(http.Dir("static"))
