@@ -30,7 +30,7 @@ var rStatus []ReviewStatus
 func getReviewers(repo string, number int) []ReviewStatus {
 	rStatus = nil
 	// List all reviewers to an assigned PR # in a repo.
-	rList, _, err := buzzClient.PullRequests.ListReviewers(ctx, "minio", repo, number)
+	rList, _, err := buzzClient.PullRequests.ListReviewers(ctx, "minio", repo, number, nil)
 	if err != nil {
 		// We should not exit on error in this case.
 		fmt.Println("Unable to get Reviewers for %s", number)
