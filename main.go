@@ -20,13 +20,21 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
+	"strings"
 
 	"golang.org/x/oauth2"
 
 	"github.com/BurntSushi/toml"
 	"github.com/google/go-github/github"
+)
+
+// holds ssl certs associated with buzz
+const (
+	sslCertPath = "/etc/ssl/certs/buzz/public.crt"
+	sslKeypath  = "/etc/ssl/certs/buzz/private.key"
 )
 
 // token is the github access token. It's sent with each request.
@@ -62,9 +70,17 @@ func main() {
 
 	http.HandleFunc("/getIssues", getIssues)
 	http.HandleFunc("/getPRs", getPRs)
+	http.HandleFunc("/setETA", setComment)
 	fs := http.FileServer(http.Dir("static"))
 	http.Handle("/", fs)
-	http.ListenAndServe(":7000", nil)
+	if strings.EqualFold(os.Getenv("BUZZ_PRODUCTION"), "on") {
+		err := http.ListenAndServeTLS(":443", sslCertPath, sslKeypath, nil)
+		if err != nil {
+			log.Fatal("ListenAndServe: ", err)
+		}
+	} else {
+		log.Fatalln(http.ListenAndServe(":7000", nil))
+	}
 }
 
 func exitOnErr(err error) {
