@@ -51,7 +51,7 @@ $(document).ready(function () {
     });
 
     // PR Table
-    $('#table-prs').DataTable({
+    var dataTablePR = $('#table-prs').DataTable({
         "ajax": {
             "url": "/getPRs",
             "dataSrc": ""
@@ -68,6 +68,18 @@ $(document).ready(function () {
             { data : "repo_name"}
         ]
     });
+
+
+    // Refresh data tables
+    setInterval(function () {
+        if($('#table-issues')[0]) {
+            dataTableIssues.ajax.reload();
+        }
+
+        if($('#table-prs')[0]) {
+            dataTablePR.ajax.reload();
+        }
+    }, 300000);
 
 
     // Table Column Resize
