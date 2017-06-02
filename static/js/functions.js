@@ -80,6 +80,21 @@ $(document).ready(function () {
                         return "";
                     }
                 }
+            },
+            {
+                data : "ReviewState",
+                "render": function(data) {
+                    if(data !== null) {
+                        var reviewer = '';
+                        $.each(data, function(k, value) {
+                            reviewer += "<div class='tableTables__tag tableTables__tag--default'>" + value.user.login + " : "+ value.state + "</div>";
+                        });
+                        return reviewer;
+                    }
+                    else {
+                        return "";
+                    }
+                }
             }
         ]
     });
