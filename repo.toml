@@ -9,6 +9,6 @@ repoNames = [
   "minio/minio-py",
   "minio/minio-dotnet",
   "minio/doctor",
-  "MinioOps/remix",
+  "minio/mint",
   "minio/minfs"
 ]

@@ -25,7 +25,16 @@ type ReviewStatus struct {
 	} `json:"user"`
 }
 
+// ReviewState - holds each PRs Reviewer's state
+type ReviewState struct {
+	User struct {
+		Login string `json:"login"`
+	} `json:"user"`
+	State string `json:"state"`
+}
+
 var rStatus []ReviewStatus
+var rReviews []ReviewState
 
 func getReviewers(repo string, number int) []ReviewStatus {
 	rStatus = nil
@@ -41,4 +50,21 @@ func getReviewers(repo string, number int) []ReviewStatus {
 		rStatus = append(rStatus, eachReviewer)
 	}
 	return rStatus
+}
+
+func getReviewStatesForPR(repo string, number int) []ReviewState {
+	rReviews = nil
+	// List all reviewers to an assigned PR # in a repo.
+	rList, _, err := buzzClient.PullRequests.ListReviews(ctx, "minio", repo, number, nil)
+	if err != nil {
+		// We should not exit on error in this case.
+		fmt.Println("Unable to get Reviewers for %s", number)
+	}
+	for _, elem := range rList {
+		eachReview := ReviewState{}
+		eachReview.User.Login = elem.User.GetLogin()
+		eachReview.State = elem.GetState()
+		rReviews = append(rReviews, eachReview)
+	}
+	return rReviews
 }

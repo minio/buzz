@@ -71,6 +71,7 @@ func main() {
 	http.HandleFunc("/getIssues", getIssues)
 	http.HandleFunc("/getPRs", getPRs)
 	http.HandleFunc("/setETA", setComment)
+
 	fs := http.FileServer(http.Dir("static"))
 	http.Handle("/", fs)
 	if strings.EqualFold(os.Getenv("BUZZ_PRODUCTION"), "on") {

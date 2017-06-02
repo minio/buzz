@@ -26,18 +26,19 @@ import (
 
 // GitPRs - holds only relevant PRs
 type GitPRs struct {
-	Number    int    `json:"number"`
-	ID        int    `json:"id"`
-	Title     string `json:"title"`
-	Labels    string `json:"name"`
-	Sender    string `json:"sender"`
-	Assignees string `json:"login"`
-	State     string `json:"state"`
-	UpdatedAt string `json:"updated_at"`
-	Repo      string `json:"repo_name"`
-	Link      string `json:"html_url"`
-	Hours     int64  `json:"hours"`
-	Reviewers []ReviewStatus
+	Number      int    `json:"number"`
+	ID          int    `json:"id"`
+	Title       string `json:"title"`
+	Labels      string `json:"name"`
+	Sender      string `json:"sender"`
+	Assignees   string `json:"login"`
+	State       string `json:"state"`
+	UpdatedAt   string `json:"updated_at"`
+	Repo        string `json:"repo_name"`
+	Link        string `json:"html_url"`
+	Hours       int64  `json:"hours"`
+	Reviewers   []ReviewStatus
+	ReviewState []ReviewState
 }
 
 // PRIssues - holds all PRs
@@ -98,6 +99,7 @@ func populatePRs(rName string, url string) {
 		eachPRIssue.ID = elem.ID
 		eachPRIssue.Link = elem.HTMLURL
 		eachPRIssue.Reviewers = getReviewers(eachPRIssue.Repo, eachPRIssue.Number)
+		eachPRIssue.ReviewState = getReviewStatesForPR(eachPRIssue.Repo, eachPRIssue.Number)
 		pRequests = append(pRequests, eachPRIssue)
 	} // end of for
 }
