@@ -65,7 +65,22 @@ $(document).ready(function () {
             { data : "sender"},
             { data : "updated_at"},
             { data : "hours"},
-            { data : "repo_name"}
+            { data : "repo_name"},
+            {
+                data : "Reviewers",
+                "render": function(data) {
+                    if(data !== null) {
+                        var reviewer = '';
+                        $.each(data, function(k, value) {
+                            reviewer += "<div class='tableTables__tag tableTables__tag--default'>" + value.user.login + "</div>";
+                        });
+                        return reviewer;
+                    }
+                    else {
+                        return "";
+                    }
+                }
+            }
         ]
     });
 
@@ -90,9 +105,19 @@ $(document).ready(function () {
 
 
     // Issues table row link
-    $('body').on('click', '#table-issues tbody tr', function (e) {
+    $('body').on('click', 'table tbody tr', function (e) {
+        var table;
+
+        if($(this).closest('table').is('#table-prs')) {
+            table = dataTablePR
+        }
+
+        if($(this).closest('table').is('#table-issues')) {
+            table = dataTableIssues
+        }
+
         if(!$(e.target).is('.set-eta__input')) {
-            var data = dataTableIssues.row( this ).data();
+            var data = table.row(this).data();
             window.open(data["html_url"], '_blank');
         }
     });

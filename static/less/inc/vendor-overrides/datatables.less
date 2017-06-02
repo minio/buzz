@@ -186,8 +186,15 @@
 .tableTables__tag {
     display: inline-block;
     border-radius: 2px;
-    color: @white;
     padding: 4px 8px 5px;
     margin: 2px 4px 2px 0;
     font-size: @font-size-base - 1;
+
+    &:not(.tableTables__tag--default) {
+        color: @white;
+    }
+}
+
+.tableTables__tag {
+    background-color: @muted-bg;
 }
