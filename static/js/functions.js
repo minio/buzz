@@ -1,4 +1,28 @@
 $(document).ready(function () {
+    var table;
+    var tableData;
+    var tableDataID;
+    var tableDataRepo;
+
+    // Notification
+    function notify (title, text, type) {
+        new PNotify({
+            title: title,
+            text: text,
+            type: type,
+            styling: 'bootstrap3',
+            buttons: {
+                closer: false,
+                sticker: false
+            },
+            delay: 2500,
+            animate: {
+                animate: true,
+                in_class: 'fadeInDown',
+                out_class: 'fadeOutUp'
+            }
+        });
+    }
 
     // Issues Table
     var dataTableIssues = $('#table-issues').DataTable({
@@ -85,11 +109,11 @@ $(document).ready(function () {
                 data : "ReviewState",
                 "render": function(data) {
                     if(data !== null) {
-                        var reviewer = '';
+                        var reviewActivity = '';
                         $.each(data, function(k, value) {
-                            reviewer += "<div class='tableTables__tag tableTables__tag--default'>" + value.user.login + " : "+ value.state + "</div>";
+                            reviewActivity += "<div class='tableTables__tag tableTables__tag--default'>" + value.user.login + " : "+ value.state + "</div>";
                         });
-                        return reviewer;
+                        return reviewActivity;
                     }
                     else {
                         return "";
@@ -118,10 +142,8 @@ $(document).ready(function () {
         resizeMode: 'flex'
     });
 
-
-    // Issues table row link
+    // Table row link and data assign
     $('body').on('click', 'table tbody tr', function (e) {
-        var table;
 
         if($(this).closest('table').is('#table-prs')) {
             table = dataTablePR
@@ -131,31 +153,47 @@ $(document).ready(function () {
             table = dataTableIssues
         }
 
+        // Get table data and assign to variables
+        tableData = table.row(this).data();
+        tableDataID = tableData["number"];
+        var tableDataURL = tableData["repository_url"];
+        tableDataRepo = tableDataURL.substr(tableData["repository_url"].lastIndexOf('/') + 1);
+
+        // Open Issue link in new tab
         if(!$(e.target).is('.set-eta__input')) {
-            var data = table.row(this).data();
-            window.open(data["html_url"], '_blank');
+            window.open(tableData["html_url"], '_blank');
         }
     });
 
     $('body').on('click', '.set-eta__input', function () {
-        if(!$(this).hasClass('set-eta__input--active')) {
-            // Remove any previous instances
-            $('.flatpickr-calendar').remove();
+        var inputETA = $(this);
 
-            // Add/remove active class to identify active instance
-            $('.set-eta__input').removeClass('set-eta__input--active')
-            $(this).addClass('set-eta__input--active');
+        // Add/remove active class to identify active instance
+        //$(this).addClass('set-eta__input--active');
 
-            // Get current date
-            var defaultDate = $(this).val() || '';
+        // Remove any previous instances
+        $('.flatpickr-calendar').remove();
 
-            // Initiate the picker
-            $(this).flatpickr({
-                defaultDate: defaultDate,
-                enableTime: true,
-                nextArrow: '<i class="zmdi zmdi-long-arrow-right" />',
-                prevArrow: '<i class="zmdi zmdi-long-arrow-left" />'
-            }).open();
-        }
+        // Get current date
+        var defaultDate = $(this).val() || '';
+
+        // Initiate the picker
+        $(this).flatpickr({
+            defaultDate: defaultDate,
+            enableTime: true,
+            nextArrow: '<i class="zmdi zmdi-long-arrow-right" />',
+            prevArrow: '<i class="zmdi zmdi-long-arrow-left" />',
+            onClose: function(dateObj, dateStr) {
+                if(dateStr != '') {
+                    if(!inputETA.hasClass('set-eta__input--active')) {
+                       $.post( '/setETA?number='+tableDataID+'&repo='+tableDataRepo+'&org=minio&comment=ETA: '+dateStr, function() {
+                            notify('', 'ETA successfully set for issue no. '+ tableDataID + ' of ' + tableDataRepo + ' repository!', 'success');
+                            inputETA.addClass('set-eta__input--active');
+                       })
+                    }
+                }
+            }
+        }).open();
+
     });
 });
