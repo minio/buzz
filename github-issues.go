@@ -63,9 +63,6 @@ type RepoIssues struct {
 		Color   string `json:"color"`
 		Default bool   `json:"default"`
 	} `json:"labels"`
-	Assignee struct {
-		Login string `json:"login"`
-	} `json:"assignee"`
 	Assignees []struct {
 		Login string `json:"login"`
 	} `json:"assignees"`
@@ -97,7 +94,6 @@ func populateIssues(url string) {
 	json.Unmarshal(htmlData, &mIssues)
 
 	var flag int
-
 	// iterate through each issue and scrape what buzz needs.
 	for _, elem := range mIssues {
 		eachGitIssue := GitIssues{}
@@ -129,10 +125,6 @@ func populateIssues(url string) {
 		}
 		if flag != 1 {
 			gIssues = append(gIssues, eachGitIssue)
-			flag = 0
-		} else {
-			// this is not an open issue so don't do anything but continue.
-			flag = 0
 		}
 	} // end of for
 }
