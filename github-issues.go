@@ -63,6 +63,9 @@ type RepoIssues struct {
 		Color   string `json:"color"`
 		Default bool   `json:"default"`
 	} `json:"labels"`
+	Assignee struct {
+		Login string `json:"login"`
+	} `json:"assignee"`
 	Assignees []struct {
 		Login string `json:"login"`
 	} `json:"assignees"`
@@ -93,9 +96,10 @@ func populateIssues(url string) {
 	mIssues := []RepoIssues{}
 	json.Unmarshal(htmlData, &mIssues)
 
-	var flag int
 	// iterate through each issue and scrape what buzz needs.
 	for _, elem := range mIssues {
+		// var declaration automatically initialize flag var to 0
+		var flag int
 		eachGitIssue := GitIssues{}
 
 		if elem.PullRequest.URL != "" {
