@@ -145,19 +145,15 @@ $(document).ready(function () {
     // Table row link and data assign
     $('body').on('click', 'table tbody tr', function (e) {
 
-        if($(this).closest('table').is('#table-prs')) {
-            table = dataTablePR
-        }
-
-        if($(this).closest('table').is('#table-issues')) {
-            table = dataTableIssues
-        }
-
         // Get table data and assign to variables
-        tableData = table.row(this).data();
-        tableDataID = tableData["number"];
-        var tableDataURL = tableData["repository_url"];
-        tableDataRepo = tableDataURL.substr(tableData["repository_url"].lastIndexOf('/') + 1);
+        if($(this).closest('table').is('#table-prs')) {
+            tableData = dataTablePR.row(this).data()
+        } else {
+            tableData = dataTableIssues.row(this).data()
+            tableDataID = tableData["number"];
+            var tableDataURL = tableData["repository_url"];
+            tableDataRepo = tableDataURL.substr(tableData["repository_url"].lastIndexOf('/') + 1);
+        }
 
         // Open Issue link in new tab
         if(!$(e.target).is('.set-eta__input')) {
