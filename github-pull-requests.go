@@ -33,10 +33,9 @@ type GitPRs struct {
 	Sender      string `json:"sender"`
 	Assignees   string `json:"login"`
 	State       string `json:"state"`
-	UpdatedAt   string `json:"updated_at"`
+	UpdatedAt   int64  `json:"updated_at"`
 	Repo        string `json:"repo_name"`
 	Link        string `json:"html_url"`
-	Hours       int64  `json:"hours"`
 	Reviewers   []ReviewStatus
 	ReviewState []ReviewState
 }
@@ -92,9 +91,7 @@ func populatePRs(rName string, url string) {
 		for _, assignee := range elem.Assignees {
 			eachPRIssue.Assignees += assignee.Login + " "
 		}
-		eachPRIssue.UpdatedAt = elem.UpdatedAt.Format(buzzTimeLayout)
-		delta := elem.UpdatedAt.Sub(elem.CreatedAt)
-		eachPRIssue.Hours = int64(delta.Hours())
+		eachPRIssue.UpdatedAt = elem.UpdatedAt.Unix()
 		eachPRIssue.Repo = elem.Head.Repo.Name
 		eachPRIssue.ID = elem.ID
 		eachPRIssue.Link = elem.HTMLURL
