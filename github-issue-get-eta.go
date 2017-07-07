@@ -26,7 +26,7 @@ import (
 )
 
 type eta_struct struct {
-	ETA, Err string
+	ETA, Error string
 }
 var eta eta_struct
 func getETAFromComment(org string, repo string, id int) {
@@ -36,8 +36,7 @@ func getETAFromComment(org string, repo string, id int) {
 	if err != nil {
 		fmt.Printf("Unable to get comment. Error: \"%s\"\n", err)
 		if strings.Contains(err.Error(), "404 Not Found") {
-			fmt.Println("Entered", !strings.Contains(err.Error(), "404 Not Found"))
-			eta = eta_struct{"", "404 Not Found"}
+			eta = eta_struct{"", "Issue Not Found"}
 			return
 		}
 	}
@@ -51,12 +50,13 @@ func getETAFromComment(org string, repo string, id int) {
 	re := regexp.MustCompile(`ETA: (20(1[7-9]|[2-9][0-9])-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]) (0[1-9]|1[0-9]|2[0-3]):[0-5][0-9])`)
 	for i:=len(comments)-1; i>=0; i-- {
 		match := re.FindStringSubmatch(comments[i])
-		fmt.Println("match", match, len(match))
 		if len(match) > 0 {
 			eta = eta_struct{match[1], ""}
 			return
 		}
 	}
+	eta = eta_struct{"", "No ETA Specified"}
+	return
 }
 
 func getETA(w http.ResponseWriter, req *http.Request) {
@@ -64,10 +64,12 @@ func getETA(w http.ResponseWriter, req *http.Request) {
 	repo := req.URL.Query().Get("repo")
 	id_str := req.URL.Query().Get("id")
 	id_int, err := strconv.Atoi(id_str)
+	
 	if err!= nil || id_int == 0 || org == "" || repo == "" {
 		fmt.Println("Missing/Wrong argument(s) in your URL!")
 		fmt.Println("Expected: ../getETA?org=<org>&repo=<repo>&id=<id>")
 		fmt.Println("Received: ../getETA?org=\""+org+"\"&repo=\""+repo+"\"&id=\""+id_str+"\".")
+		eta = eta_struct{"", "Wrong ARGs"}
 	} else {
 		getETAFromComment(org,repo, id_int)
 	}
