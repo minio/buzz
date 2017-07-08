@@ -96,33 +96,26 @@ $(document).ready(function () {
             },
             { data : "repo_name"},
             {
-                data : "Reviewers",
-                "render": function(data) {
-                    if(data !== null) {
-                        var reviewer = '';
-                        $.each(data, function(k, value) {
-                            reviewer += "<div class='tableTables__tag tableTables__tag--default'>" + value.user.login + "</div>";
-                        });
-                        return reviewer;
-                    }
-                    else {
-                        return "";
-                    }
-                }
-            },
-            {
                 data : "ReviewState",
                 "render": function(data) {
-                    if(data !== null) {
-                        var reviewActivity = '';
-                        $.each(data, function(k, value) {
-                            reviewActivity += "<div class='tableTables__tag tableTables__tag--default'>" + value.user.login + " : "+ value.state + "</div>";
-                        });
-                        return reviewActivity;
-                    }
-                    else {
-                        return "";
-                    }
+                    if (!data) return '';
+
+                    var reviewActivity = '';
+
+                    $.each(data, function(k, value) {
+                        var tagColor;
+                        if (value.state == 'APPROVED')
+                            tagColor = '#1c7527';
+                        else if (value.state == 'CHANGES_REQUESTED')
+                            tagColor = '#dc322f';
+                        else
+                            tagColor = '#a09800'; // pending
+
+
+                        reviewActivity += "<div class='tableTables__tag' style='background-color:"+tagColor+"'>" + value.user.login + "</div>";
+                    });
+
+                    return reviewActivity;
                 }
             }
         ]
