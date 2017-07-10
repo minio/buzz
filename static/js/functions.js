@@ -54,7 +54,10 @@ $(document).ready(function () {
             { data : "login" },
             { data : "milestone"},
             { data : "state" },
-            { data : "hours"},
+            {
+                data : "updated_at",
+                render: convertDate
+            },
             { data : "repository_url"}
         ],
         "columnDefs": [
@@ -87,8 +90,10 @@ $(document).ready(function () {
             { data : "number" },
             { data : "title" },
             { data : "sender"},
-            { data : "updated_at"},
-            { data : "hours"},
+            {
+                data : "updated_at",
+                render: convertDate
+            },
             { data : "repo_name"},
             {
                 data : "Reviewers",
@@ -123,6 +128,13 @@ $(document).ready(function () {
         ]
     });
 
+    function convertDate(data, type) {
+        // For sorting, cast it to a number.
+        if (type == "sort" || type == "type")
+            return +data;
+
+        return moment.unix(data).fromNow();
+    }
 
     // Refresh data tables
     setInterval(function () {

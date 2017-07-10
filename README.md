@@ -24,6 +24,7 @@ $ yarn build
 
 ```
 $ go build
+$ go get -v ./...
 $ GIT_TOKEN="YOUR GITHUB ACCESS TOKEN" ./buzz
 ```
 

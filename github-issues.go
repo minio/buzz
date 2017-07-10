@@ -40,9 +40,8 @@ type GitIssues struct {
 	Milestone string `json:"milestone"`
 	State     string `json:"state"`
 	CreatedAt string `json:"created_at"`
-	UpdatedAt string `json:"updated_at"`
+	UpdatedAt int64  `json:"updated_at"`
 	Repo      string `json:"repository_url"`
-	Hours     int64  `json:"hours"`
 }
 
 // RepoIssues - holds all issues per repo.
@@ -110,9 +109,7 @@ func populateIssues(url string) {
 			eachGitIssue.Repo = elem.RepositoryURL
 			eachGitIssue.Link = elem.HTMLURL
 			eachGitIssue.CreatedAt = elem.CreatedAt.Format(buzzTimeLayout)
-			eachGitIssue.UpdatedAt = elem.UpdatedAt.Format(buzzTimeLayout)
-			delta := elem.UpdatedAt.Sub(elem.CreatedAt)
-			eachGitIssue.Hours = int64(delta.Hours())
+			eachGitIssue.UpdatedAt = elem.UpdatedAt.Unix()
 
 			// iterate to get all labels and colors.
 			for _, labe := range elem.Labels {
