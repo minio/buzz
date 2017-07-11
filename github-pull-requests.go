@@ -36,7 +36,6 @@ type GitPRs struct {
 	UpdatedAt   int64  `json:"updated_at"`
 	Repo        string `json:"repo_name"`
 	Link        string `json:"html_url"`
-	Reviewers   []ReviewStatus
 	ReviewState []ReviewState
 }
 
@@ -95,8 +94,12 @@ func populatePRs(rName string, url string) {
 		eachPRIssue.Repo = elem.Head.Repo.Name
 		eachPRIssue.ID = elem.ID
 		eachPRIssue.Link = elem.HTMLURL
-		eachPRIssue.Reviewers = getReviewers(eachPRIssue.Repo, eachPRIssue.Number)
-		eachPRIssue.ReviewState = getReviewStatesForPR(eachPRIssue.Repo, eachPRIssue.Number)
+		err, states := getReviewStatesForPR(eachPRIssue.Repo, eachPRIssue.Number)
+		if err != nil {
+			fmt.Printf("error occurred in getReviewStatesForPR(): %s\n", err.Error())
+		}
+		eachPRIssue.ReviewState = states
+
 		pRequests = append(pRequests, eachPRIssue)
 	} // end of for
 }
