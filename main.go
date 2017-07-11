@@ -71,6 +71,7 @@ func main() {
 	http.HandleFunc("/getIssues", getIssues)
 	http.HandleFunc("/getPRs", getPRs)
 	http.HandleFunc("/setETA", setComment)
+	http.HandleFunc("/getETA", getETA)
 
 	fs := http.FileServer(http.Dir("static"))
 	http.Handle("/", fs)
@@ -80,6 +81,7 @@ func main() {
 			log.Fatal("ListenAndServe: ", err)
 		}
 	} else {
+		fmt.Println("About to start server on port 7000")
 		log.Fatalln(http.ListenAndServe(":7000", nil))
 	}
 }
