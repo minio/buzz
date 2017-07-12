@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -42,6 +43,7 @@ type GitIssues struct {
 	CreatedAt string `json:"created_at"`
 	UpdatedAt int64  `json:"updated_at"`
 	Repo      string `json:"repository_url"`
+	ETA       string `json:"eta"`
 }
 
 // RepoIssues - holds all issues per repo.
@@ -97,36 +99,48 @@ func populateIssues(url string) {
 
 	// iterate through each issue and scrape what buzz needs.
 	for _, elem := range mIssues {
-		// var declaration automatically initialize flag var to 0
-		var flag int
 		eachGitIssue := GitIssues{}
 
 		if elem.PullRequest.URL != "" {
-			flag = 1
-		} else {
-			eachGitIssue.Number = elem.Number
-			eachGitIssue.Title = elem.Title
-			eachGitIssue.Repo = elem.RepositoryURL
-			eachGitIssue.Link = elem.HTMLURL
-			eachGitIssue.CreatedAt = elem.CreatedAt.Format(buzzTimeLayout)
-			eachGitIssue.UpdatedAt = elem.UpdatedAt.Unix()
+			continue
+		}
 
-			// iterate to get all labels and colors.
-			for _, labe := range elem.Labels {
-				eachGitIssue.Labels = append(eachGitIssue.Labels, Label{
-					Name:  labe.Name,
-					Color: labe.Color,
-				})
-			}
-			for _, assignee := range elem.Assignees {
-				eachGitIssue.Assignees += assignee.Login + " "
-			}
-			eachGitIssue.Milestone = elem.Milestone.Title
-			eachGitIssue.State = elem.Milestone.State
+		eachGitIssue.Number = elem.Number
+		eachGitIssue.Title = elem.Title
+		eachGitIssue.Repo = elem.RepositoryURL
+		eachGitIssue.Link = elem.HTMLURL
+		eachGitIssue.CreatedAt = elem.CreatedAt.Format(buzzTimeLayout)
+		eachGitIssue.UpdatedAt = elem.UpdatedAt.Unix()
+
+		// iterate to get all labels and colors.
+		for _, labe := range elem.Labels {
+			eachGitIssue.Labels = append(eachGitIssue.Labels, Label{
+				Name:  labe.Name,
+				Color: labe.Color,
+			})
 		}
-		if flag != 1 {
-			gIssues = append(gIssues, eachGitIssue)
+		for _, assignee := range elem.Assignees {
+			eachGitIssue.Assignees += assignee.Login + " "
 		}
+		eachGitIssue.Milestone = elem.Milestone.Title
+		eachGitIssue.State = elem.Milestone.State
+
+		// Get the ETA for this issue.
+		var org, repo string
+
+		// fmt.Sscanf's %s gobbles until a space, it doesn't allow for slashes.
+		url := strings.Replace(eachGitIssue.Repo, "/", " ", -1)
+		_, err := fmt.Sscanf(url, "https:  api.github.com repos %s %s", &org, &repo)
+		if err != nil {
+			fmt.Print(err)
+		}
+
+		// Get the ETA for the issue.
+		eta := getETAFromComment(org, repo, eachGitIssue.Number)
+		eachGitIssue.ETA = eta.ETA
+		// Ignore eta.Error, will be empty string, which is fine
+
+		gIssues = append(gIssues, eachGitIssue)
 	} // end of for
 }
 

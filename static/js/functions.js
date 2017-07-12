@@ -58,13 +58,17 @@ $(document).ready(function () {
                 data : "updated_at",
                 render: convertDate
             },
-            { data : "repository_url"}
-        ],
-        "columnDefs": [
+            { data : "repository_url"},
             {
-                "targets": [ 8 ],
-                "data": null,
-                "defaultContent": "<div class='set-eta'><input class='set-eta__input' type='text' placeholder='Set ETA' /></div>"
+                targets: [ 8 ],
+                data: "eta",
+                render: function(data) {
+                    if (data) {
+                        return data;
+                    } else {
+                        return "<div class='set-eta'><input class='set-eta__input' type='text' placeholder='Set ETA' /></div>";
+                    }
+                }
             }
         ],
         "initComplete": function (settings, json) {
