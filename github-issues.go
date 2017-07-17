@@ -19,24 +19,18 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"strings"
-	"time"
+
+	"github.com/google/go-github/github"
 )
 
-// Label - holds issue labels
-type Label struct {
-	Name  string `json:"name"`
-	Color string `json:"color"`
-}
-
-// GitIssues - holds only relevant issues
-type GitIssues struct {
+// GitIssue - holds only relevant issues
+type GitIssue struct {
 	Number    int    `json:"number"`
 	Title     string `json:"title"`
 	Link      string `json:"html_url"`
-	Labels    []Label
+	Labels    []github.Label
 	Assignees string `json:"login"`
 	Milestone string `json:"milestone"`
 	State     string `json:"state"`
@@ -46,116 +40,71 @@ type GitIssues struct {
 	ETA       string `json:"eta"`
 }
 
-// RepoIssues - holds all issues per repo.
-type RepoIssues struct {
-	URL           string `json:"url"`
-	RepositoryURL string `json:"repository_url"`
-	HTMLURL       string `json:"html_url"`
-	ID            int    `json:"id"`
-	Number        int    `json:"number"`
-	Title         string `json:"title"`
-	User          struct {
-		Login string `json:"login"`
-	} `json:"user"`
-	Labels []struct {
-		ID      int    `json:"id"`
-		URL     string `json:"url"`
-		Name    string `json:"name"`
-		Color   string `json:"color"`
-		Default bool   `json:"default"`
-	} `json:"labels"`
-	Assignee struct {
-		Login string `json:"login"`
-	} `json:"assignee"`
-	Assignees []struct {
-		Login string `json:"login"`
-	} `json:"assignees"`
-	Milestone struct {
-		Title string `json:"title"`
-		State string `json:"state"`
-	} `json:"milestone"`
-	CreatedAt   time.Time   `json:"created_at"`
-	UpdatedAt   time.Time   `json:"updated_at"`
-	ClosedAt    interface{} `json:"closed_at"`
-	PullRequest struct {
-		URL string `json:"url"`
-	} `json:"pull_request"`
-}
-
-var gIssues []GitIssues
-
-func populateIssues(url string) {
-	pullURL := url + token
-	fmt.Println("Fetching from....", pullURL)
-	resp, err := http.Get(pullURL)
-	exitOnErr(err)
-
-	defer resp.Body.Close()
-	htmlData, err := ioutil.ReadAll(resp.Body)
-	exitOnErr(err)
-
-	mIssues := []RepoIssues{}
-	json.Unmarshal(htmlData, &mIssues)
+func getIssuesForRepo(owner string, repo string) (issues []GitIssue, err error) {
+	issuesGH, _, err := buzzClient.Issues.ListByRepo(ctx, owner, repo, nil)
+	if err != nil {
+		return nil, err
+	}
 
 	// iterate through each issue and scrape what buzz needs.
-	for _, elem := range mIssues {
-		eachGitIssue := GitIssues{}
+	for _, elem := range issuesGH {
+		// var declaration automatically initialize flag var to 0
+		issue := GitIssue{}
 
-		if elem.PullRequest.URL != "" {
+		if elem.PullRequestLinks != nil {
 			continue
 		}
 
-		eachGitIssue.Number = elem.Number
-		eachGitIssue.Title = elem.Title
-		eachGitIssue.Repo = elem.RepositoryURL
-		eachGitIssue.Link = elem.HTMLURL
-		eachGitIssue.CreatedAt = elem.CreatedAt.Format(buzzTimeLayout)
-		eachGitIssue.UpdatedAt = elem.UpdatedAt.Unix()
-
-		// iterate to get all labels and colors.
-		for _, labe := range elem.Labels {
-			eachGitIssue.Labels = append(eachGitIssue.Labels, Label{
-				Name:  labe.Name,
-				Color: labe.Color,
-			})
-		}
-		for _, assignee := range elem.Assignees {
-			eachGitIssue.Assignees += assignee.Login + " "
-		}
-		eachGitIssue.Milestone = elem.Milestone.Title
-		eachGitIssue.State = elem.Milestone.State
+		issue.Number = *elem.Number
+		issue.Title = *elem.Title
+		issue.Repo = owner + "/" + repo
+		issue.Link = *elem.HTMLURL
+		issue.CreatedAt = elem.CreatedAt.Format(buzzTimeLayout)
+		issue.UpdatedAt = elem.UpdatedAt.Unix()
+		issue.Labels = elem.Labels
 
 		// Get the ETA for this issue.
-		var org, repo string
-
-		// fmt.Sscanf's %s gobbles until a space, it doesn't allow for slashes.
-		url := strings.Replace(eachGitIssue.Repo, "/", " ", -1)
-		_, err := fmt.Sscanf(url, "https:  api.github.com repos %s %s", &org, &repo)
-		if err != nil {
-			fmt.Print(err)
-		}
-
-		// Get the ETA for the issue.
-		eta := getETAFromComment(org, repo, eachGitIssue.Number)
-		eachGitIssue.ETA = eta.ETA
+		eta := getETAFromComment(owner, repo, *elem.Number)
+		issue.ETA = eta.ETA
 		// Ignore eta.Error, will be empty string, which is fine
 
-		gIssues = append(gIssues, eachGitIssue)
-	} // end of for
+		for _, assignee := range elem.Assignees {
+			issue.Assignees += *assignee.Login + " "
+		}
+
+		if elem.Milestone != nil {
+			issue.Milestone = *elem.Milestone.Title
+			issue.State = *elem.Milestone.State
+		}
+
+		issues = append(issues, issue)
+	}
+
+	return issues, nil
 }
 
 func getIssues(w http.ResponseWriter, req *http.Request) {
-	gIssues = nil
-	// One Minio.
-	for _, rName := range config.RepoNames {
-		populateIssues(`https://api.github.com/repos/` + rName + `/issues?state=open&per_page=100&access_token=`)
+	issues := []GitIssue{}
+
+	for _, locator := range config.RepoNames {
+		parts := strings.SplitN(locator, "/", 2)
+
+		iss, err := getIssuesForRepo(parts[0], parts[1])
+		if err != nil {
+			w.WriteHeader(502)
+			fmt.Fprint(w, err)
+			return
+		}
+
+		issues = append(issues, iss...)
 	}
-	js, err := json.Marshal(gIssues)
+
+	js, err := json.Marshal(issues)
 	if err != nil {
 		fmt.Print(err)
 		return
 	}
+
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(js)
-
 }
