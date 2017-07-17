@@ -33,6 +33,14 @@ type ReviewState struct {
 func getReviewStatesForPR(repo string, number int) (error, []ReviewState) {
 	reviews := make(map[string]*github.PullRequestReview)
 
+	// Get the username of the PR author.
+	pr, _, err := buzzClient.PullRequests.Get(ctx, "minio", repo, number)
+	if err != nil {
+		return err, nil
+	}
+
+	author := *pr.User.Login
+
 	// List all reviewers to an assigned PR # in a repo.
 	reviewers, _, err := buzzClient.PullRequests.ListReviewers(ctx, "minio", repo, number, nil)
 	if err != nil {
@@ -61,14 +69,14 @@ func getReviewStatesForPR(repo string, number int) (error, []ReviewState) {
 	}
 
 	for _, elem := range voluntaryReviews {
-		// Ignore comments, without a true review they cannot change status.
-		if elem.GetState() == "COMMENTED" {
-			continue
-		}
-
 		username := elem.User.GetLogin()
 
 		if _, ok := reviews[username]; ok {
+			// Comments never take priority.
+			if elem.GetState() == "COMMENTED" {
+				continue
+			}
+
 			// If they've been assigned previously and are
 			// continuing with their review, compare the time of this
 			// review to their previous review, replacing it if it's newer.
@@ -85,6 +93,11 @@ func getReviewStatesForPR(repo string, number int) (error, []ReviewState) {
 	// Convert the map to an array.
 	rReviews := make([]ReviewState, 0, len(reviews))
 	for username, latest := range reviews {
+		// Do not include the author in the list.
+		if username == author {
+			continue
+		}
+
 		rReview := ReviewState{}
 		rReview.User.Login = username
 		rReview.State = latest.GetState()

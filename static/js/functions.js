@@ -112,6 +112,8 @@ $(document).ready(function () {
                             tagColor = '#1c7527';
                         else if (value.state == 'CHANGES_REQUESTED')
                             tagColor = '#dc322f';
+                        else if (value.state == 'COMMENTED')
+                            tagColor = '#7c7c7c';
                         else
                             tagColor = '#a09800'; // pending
 
