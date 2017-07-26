@@ -19,13 +19,12 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
-	"time"
+	"strings"
 )
 
-// GitPRs - holds only relevant PRs
-type GitPRs struct {
+// GitPR - a single pull request
+type GitPR struct {
 	Number      int    `json:"number"`
 	ID          int    `json:"id"`
 	Title       string `json:"title"`
@@ -39,82 +38,64 @@ type GitPRs struct {
 	ReviewState []ReviewState
 }
 
-// PRIssues - holds all PRs
-type PRIssues struct {
-	ID      int    `json:"id"`
-	HTMLURL string `json:"html_url"`
-	Number  int    `json:"number"`
-	State   string `json:"state"`
-	Title   string `json:"title"`
-	User    struct {
-		Login string `json:"login"`
-	} `json:"user"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
-	Assignee  struct {
-		Login string `json:"login"`
-	} `json:"assignee"`
-	Assignees []struct {
-		Login string `json:"login"`
-	} `json:"assignees"`
-	Head struct {
-		User struct {
-			Login string `json:"login"`
-		} `json:"user"`
-		Repo struct {
-			Name string `json:"name"`
-		} `json:"repo"`
-	} `json:"head"`
-}
+// Retrieve the relevant pull request data from an owner/repo.
+func getPullRequests(owner string, repo string) (pullRequests []GitPR, err error) {
+	prs, _, err := buzzClient.PullRequests.List(ctx, owner, repo, nil)
+	if err != nil {
+		return nil, err
+	}
 
-var pRequests []GitPRs
+	pullRequests = []GitPR{}
 
-func populatePRs(rName string, url string) {
-	pullURL := url + token
-	fmt.Println("Fetching from....", pullURL)
-	resp, err := http.Get(pullURL)
-	exitOnErr(err)
-
-	defer resp.Body.Close()
-	htmlData, err := ioutil.ReadAll(resp.Body)
-	exitOnErr(err)
-
-	pIssues := []PRIssues{}
-	json.Unmarshal(htmlData, &pIssues)
-
-	for _, elem := range pIssues {
-		eachPRIssue := GitPRs{}
-		eachPRIssue.Number = elem.Number
-		eachPRIssue.Title = elem.Title
-		eachPRIssue.Sender = elem.Head.User.Login
+	for _, elem := range prs {
+		pullRequest := GitPR{}
+		pullRequest.Number = *elem.Number
+		pullRequest.Title = *elem.Title
+		pullRequest.Sender = *elem.Head.User.Login
 		for _, assignee := range elem.Assignees {
-			eachPRIssue.Assignees += assignee.Login + " "
+			pullRequest.Assignees += *assignee.Login + " "
 		}
-		eachPRIssue.UpdatedAt = elem.UpdatedAt.Unix()
-		eachPRIssue.Repo = elem.Head.Repo.Name
-		eachPRIssue.ID = elem.ID
-		eachPRIssue.Link = elem.HTMLURL
-		err, states := getReviewStatesForPR(eachPRIssue.Repo, eachPRIssue.Number)
-		if err != nil {
-			fmt.Printf("error occurred in getReviewStatesForPR(): %s\n", err.Error())
-		}
-		eachPRIssue.ReviewState = states
+		pullRequest.UpdatedAt = elem.UpdatedAt.Unix()
+		pullRequest.Repo = repo
+		pullRequest.ID = *elem.ID
+		pullRequest.Link = *elem.HTMLURL
 
-		pRequests = append(pRequests, eachPRIssue)
-	} // end of for
+		err, states := getReviewStatesForPR(pullRequest.Repo, pullRequest.Number)
+		if err != nil {
+			return nil, err
+		}
+		pullRequest.ReviewState = states
+
+		pullRequests = append(pullRequests, pullRequest)
+	}
+
+	return pullRequests, nil
 }
 
 func getPRs(w http.ResponseWriter, req *http.Request) {
-	pRequests = nil
-	// One Minio.
-	for _, rName := range config.RepoNames {
-		populatePRs(rName, `https://api.github.com/repos/`+rName+`/pulls?state=open&per_page=100&access_token=`)
+	pullRequests := []GitPR{}
+
+	for _, locator := range config.RepoNames {
+		// It's in the format owner/repo.
+		parts := strings.SplitN(locator, "/", 2)
+
+		prs, err := getPullRequests(parts[0], parts[1])
+		if err != nil {
+			w.WriteHeader(501)
+			fmt.Fprint(w, err)
+			return
+		}
+
+		pullRequests = append(pullRequests, prs...)
 	}
-	js, err := json.Marshal(pRequests)
+
+	js, err := json.Marshal(pullRequests)
 	if err != nil {
-		fmt.Print(err)
+		w.WriteHeader(501)
+		fmt.Fprint(w, err)
 		return
 	}
+
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(js)
 }
