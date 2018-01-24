@@ -37,37 +37,46 @@ const (
 	sslKeypath  = "/etc/ssl/certs/buzz/private.key"
 )
 
-// token is the github access token. It's sent with each request.
-var token = ""
-
-// TomlConfig - holds all the repo names
-type tomlConfig struct {
-	RepoNames []string `toml:"repoNames"`
-}
-
-var config tomlConfig
-var buzzClient *github.Client
-var ctx = context.Background()
-
 const buzzTimeLayout = "Jan 2, 2006 at 3:04pm"
 
-func main() {
-	token = os.Getenv("GIT_TOKEN")
+var (
+	// Buzz configuration info.
+	config buzzConfig
+
+	// Initialized github client with access token.
+	buzzClient *github.Client
+
+	// Default context, this also means no context.
+	ctx = context.Background()
+)
+
+// Initializes all the global state - always run before main() by go runtime.
+func init() {
+	// token is the github access token. It's sent with each request.
+	token := os.Getenv("GIT_TOKEN")
 	if token == "" {
 		exitOnErr(errors.New("Github token is not set"))
 	}
+
+	// Verify if token is correct.
+	_, err := http.Get(`https://api.github.com/?access_token=` + token)
+	exitOnErr(err)
+
 	if _, err := toml.DecodeFile("repo.toml", &config); err != nil {
 		exitOnErr(err)
 	}
-	tokenAuthenticate()
 
-	ts := oauth2.StaticTokenSource(
+	buzzClient = github.NewClient(oauth2.NewClient(ctx, oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: token},
-	)
-	tc := oauth2.NewClient(ctx, ts)
+	)))
+}
 
-	buzzClient = github.NewClient(tc)
+// BuzzConfig - holds all the repo names
+type buzzConfig struct {
+	RepoNames []string `toml:"repoNames"`
+}
 
+func main() {
 	http.HandleFunc("/getIssues", getIssues)
 	http.HandleFunc("/getPRs", getPRs)
 	http.HandleFunc("/setETA", setComment)
@@ -91,11 +100,4 @@ func exitOnErr(err error) {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-}
-
-func tokenAuthenticate() {
-	postURL := `https://api.github.com/?access_token=` + token
-	_, err := http.Get(postURL)
-	exitOnErr(err)
-
 }

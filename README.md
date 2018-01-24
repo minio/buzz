@@ -1,12 +1,11 @@
 
 # Buzz
-A prototype for Github workflow management 
+A simple Github workflow management UI.
 
 ## Install Dependencies
 ```
 $ yarn install
 ```
-
 
 ## Install Bower Components
 ```
@@ -19,12 +18,9 @@ $ bower install
 $ yarn build
 ```
 
-
-## Starting Buzz Server
-
+## Start Buzz
 ```
 $ go build
-$ go get -v ./...
 $ GIT_TOKEN="YOUR GITHUB ACCESS TOKEN" ./buzz
 ```
 

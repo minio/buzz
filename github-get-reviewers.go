@@ -30,11 +30,11 @@ type ReviewState struct {
 	State string `json:"state"`
 }
 
-func getReviewStatesForPR(repo string, number int) (error, []ReviewState) {
+func getReviewStatesForPR(owner, repo string, number int) (error, []ReviewState) {
 	reviews := make(map[string]*github.PullRequestReview)
 
 	// Get the username of the PR author.
-	pr, _, err := buzzClient.PullRequests.Get(ctx, "minio", repo, number)
+	pr, _, err := buzzClient.PullRequests.Get(ctx, owner, repo, number)
 	if err != nil {
 		return err, nil
 	}
@@ -42,7 +42,7 @@ func getReviewStatesForPR(repo string, number int) (error, []ReviewState) {
 	author := *pr.User.Login
 
 	// List all reviewers to an assigned PR # in a repo.
-	reviewers, _, err := buzzClient.PullRequests.ListReviewers(ctx, "minio", repo, number, nil)
+	reviewers, _, err := buzzClient.PullRequests.ListReviewers(ctx, owner, repo, number, nil)
 	if err != nil {
 		return err, nil
 	}
@@ -63,7 +63,7 @@ func getReviewStatesForPR(repo string, number int) (error, []ReviewState) {
 	}
 
 	// List all who voluntarily gave a review.
-	voluntaryReviews, _, err := buzzClient.PullRequests.ListReviews(ctx, "minio", repo, number, nil)
+	voluntaryReviews, _, err := buzzClient.PullRequests.ListReviews(ctx, owner, repo, number, nil)
 	if err != nil {
 		return err, nil
 	}
