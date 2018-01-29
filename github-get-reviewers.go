@@ -47,7 +47,7 @@ func getReviewStatesForPR(repo string, number int) (error, []ReviewState) {
 		return err, nil
 	}
 
-	for _, elem := range reviewers {
+	for _, elem := range reviewers.Users {
 		review := &github.PullRequestReview{}
 		review.User = elem
 
