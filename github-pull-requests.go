@@ -60,7 +60,7 @@ func getPullRequests(owner string, repo string) (pullRequests []GitPR, err error
 		pullRequest.ID = *elem.ID
 		pullRequest.Link = *elem.HTMLURL
 
-		err, states := getReviewStatesForPR(pullRequest.Repo, pullRequest.Number)
+		err, states := getReviewStatesForPR(owner, pullRequest.Repo, pullRequest.Number)
 		if err != nil {
 			return nil, err
 		}
