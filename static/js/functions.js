@@ -42,6 +42,7 @@ $(document).ready(function () {
                     if(data !== null) {
                         var tag = '';
                         $.each(data, function(k, value) {
+
                             tag += "<div class='tableTables__tag' style='background-color:#"+value.color+"'>" + value.name + "</div>";
                         });
                         return tag;
@@ -75,14 +76,20 @@ $(document).ready(function () {
 
         },
         "rowCallback": function( row, data, index ) {
-            if ( data[4] == "A" ) {
-                $('td:eq(4)', row).html( '<b>A</b>' );
+
+            if(data.Labels !== null) {
+                $.each(data.Labels, function(k, value) {
+                    if (value.name == 'blocked') {
+                      $('td', row).addClass('shadeRow');
+                    }
+                });
             }
         }
     });
 
     // PR Table
     var dataTablePR = $('#table-prs').DataTable({
+
         "ajax": {
             "url": "/getPRs",
             "dataSrc": ""
@@ -124,7 +131,16 @@ $(document).ready(function () {
                     return reviewActivity;
                 }
             }
-        ]
+        ],
+        "rowCallback": function( row, data, index ) {
+            if(data.Labels !== null) {
+                $.each(data.name, function(k, value) {
+                    if (value.name == 'blocked') {
+                      $('td', row).addClass('shadeRow');
+                    }
+                });
+            }
+        }
     });
 
     function convertDate(data, type) {
