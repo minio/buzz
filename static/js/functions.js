@@ -31,7 +31,7 @@ $(document).ready(function () {
             "dataSrc": ""
         },
         lengthMenu: [[15, 30, 60, 100, -1], ['15 Rows', '30 Rows', '60 Rows', '100 Rows', 'All']],
-        "sDom": '<"dataTables__top"lf><"dataTables__inner"rt><"dataTables__bottom"p><"clear">',
+        "sDom": '<"dataTables__top"lfB><"dataTables__inner"rt><"dataTables__bottom"p><"clear">',
         "autoWidth": false,
         "columns": [
             { data : "number" },
@@ -72,8 +72,14 @@ $(document).ready(function () {
                 }
             }
         ],
+        buttons: [
+            {
+                extend: 'csvHtml5',
+                title: 'Export Data'
+            }
+        ],
         "initComplete": function (settings, json) {
-
+            $('.dataTables__top').prepend('<div class="dataTables__export"><i class="zmdi zmdi-upload" />Export</div>');
         },
         "rowCallback": function( row, data, index ) {
 
@@ -85,6 +91,11 @@ $(document).ready(function () {
                 });
             }
         }
+    });
+
+    // Issue table - CSV export
+    $('body').on('click', '.dataTables__export', function () {
+        $(this).closest('.dataTables_wrapper').find('.buttons-csv').trigger('click');
     });
 
     // PR Table
@@ -161,7 +172,6 @@ $(document).ready(function () {
             dataTablePR.ajax.reload();
         }
     }, 300000);
-
 
     // Table Column Resize
     $('.table').colResizable({
