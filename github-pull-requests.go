@@ -42,8 +42,12 @@ type GitPR struct {
 
 // Retrieve the relevant pull request data from an owner/repo.
 func getPullRequests(owner string, repo string) (pullRequests []GitPR, err error) {
-	prs, _, err := buzzClient.PullRequests.List(ctx, owner, repo, nil)
-
+	opt := &github.PullRequestListOptions{
+		ListOptions: github.ListOptions{
+			PerPage: 50,
+		},
+	}
+	prs, _, err := buzzClient.PullRequests.List(ctx, owner, repo, opt)
 	if err != nil {
 		return nil, err
 	}
