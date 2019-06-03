@@ -1,0 +1,16 @@
+github.com/BurntSushi/toml v0.0.0-20170626110600-a368813c5e64 h1:BuYewlQyh/jroxY8qx41SrzD8Go17GkyCyAeVmprvQI=
+github.com/BurntSushi/toml v0.0.0-20170626110600-a368813c5e64/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
+github.com/golang/protobuf v0.0.0-20180518024905-668a607657a5 h1:p5upHGsNZW0M5jkOdbaCdnZNXIBnRqR3cYg2sBefO+M=
+github.com/golang/protobuf v0.0.0-20180518024905-668a607657a5/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
+github.com/google/go-github v0.0.0-20180509124334-8ea2e2657df8 h1:G3iajMQQzI0XSmQDoGzyzX0c+BnNhryqGvUZQi0rHtA=
+github.com/google/go-github v0.0.0-20180509124334-8ea2e2657df8/go.mod h1:zLgOLi98H3fifZn+44m+umXrS52loVEgC2AApnigrVQ=
+github.com/google/go-querystring v0.0.0-20170111101155-53e6ce116135 h1:zLTLjkaOFEFIOxY5BWLFLwh+cL8vOBW4XJ2aqLE/Tf0=
+github.com/google/go-querystring v0.0.0-20170111101155-53e6ce116135/go.mod h1:odCYkC5MyYFN7vkCjXpyrEuKhc/BUO6wN/zVPAxq5ck=
+golang.org/x/net v0.0.0-20180511174649-2491c5de3490 h1:0Q0ESa4hjqMAXX5fW/YoKX7MlU1fWzl2ZNJrv7Yo3ZE=
+golang.org/x/net v0.0.0-20180511174649-2491c5de3490/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
+golang.org/x/oauth2 v0.0.0-20180503012634-cdc340f7c179 h1:i7nIATcLJZqBHx/NOl8hfnkelUjmcyEhCN1/oISBrUc=
+golang.org/x/oauth2 v0.0.0-20180503012634-cdc340f7c179/go.mod h1:N/0e6XlmueqKjAGxoOufVs8QHGRruUQn6yWY3a++T0U=
+golang.org/x/sync v0.0.0-20190423024810-112230192c58 h1:8gQV6CLnAEikrhgkHFbMAEhagSSnXWGV915qUMm9mrU=
+golang.org/x/sync v0.0.0-20190423024810-112230192c58/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
+google.golang.org/appengine v0.0.0-20180516225643-b9aad5d628b2 h1:mg1+Qt6fdG5Y5fb9E721qbFgWgSmJinMYHl3TcxH8ng=
+google.golang.org/appengine v0.0.0-20180516225643-b9aad5d628b2/go.mod h1:EbEs0AVv82hx2wNQdGPgUI5lhzA/G0D9YwlJXL52JkM=
