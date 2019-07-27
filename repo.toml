@@ -8,6 +8,6 @@ repoNames = [
   "minio/minio-java",
   "minio/minio-py",
   "minio/minio-dotnet",
-  "minio/mint",
+  "minio/minsql",
   "minio/cookbook",
 ]
