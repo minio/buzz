@@ -198,3 +198,26 @@
 .tableTables__tag {
     background-color: @muted-bg;
 }
+
+.dataTables__export {
+    border: 1px solid @input-border;
+    height: 45px;
+    line-height: 42px;
+    padding: 0 15px;
+    margin-left: 20px;
+    float: right;
+    cursor: pointer;
+    .transition(border-color);
+    .transition-duration(300ms);
+
+    & > i {
+        font-size: @font-size-base + 2;
+        color: @heading-color;
+        margin: 0 10px 0 0;
+        vertical-align: middle;
+    }
+    
+    &:hover {
+        border-color: @input-border-focus;
+    }
+}
