@@ -189,7 +189,7 @@ $(document).ready(function () {
             tableData = dataTableIssues.row(this).data()
             tableDataID = tableData["number"];
             var tableDataURL = tableData["repository_url"];
-            tableDataRepo = tableDataURL.substr(tableData["repository_url"].lastIndexOf('/') + 1);
+            tableDataRepo = tableDataURL.slice(tableData["repository_url"].lastIndexOf('/') + 1);
         }
 
         // Open Issue link in new tab
